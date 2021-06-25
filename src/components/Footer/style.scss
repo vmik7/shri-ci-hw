@@ -1,0 +1,46 @@
+@import '../../variables.scss';
+
+.footer {
+    background: #f0f2f3;
+    padding: 8px 0;
+
+    font-size: 13px;
+    line-height: 16px;
+
+    letter-spacing: 0.06px;
+
+    color: #7f8285;
+
+    &__container {
+        display: flex;
+        justify-content: space-between;
+
+        @media screen and (max-width: $md4 + px) {
+            flex-direction: column;
+            row-gap: 8px;
+        }
+    }
+
+    &__list {
+        display: flex;
+    }
+
+    &__item {
+        &:not(:last-child) {
+            margin-right: 12px;
+        }
+    }
+
+    &__link {
+        text-decoration: none;
+        color: #7f8285;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: #e00000;
+        }
+    }
+
+    &__copyright {
+    }
+}

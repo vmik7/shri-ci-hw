@@ -1,0 +1,21 @@
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    &__content {
+        flex: 1;
+
+        padding-top: 8px;
+        padding-bottom: 20px;
+
+        &_center {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+    }
+
+    &__footer {
+    }
+}

@@ -1,0 +1,64 @@
+@import '../../../variables.scss';
+
+.button {
+    background: #e6e6e6;
+    border-radius: 4px;
+    padding: 0 18px;
+    height: 36px;
+
+    display: block;
+
+    border: 2px solid transparent;
+
+    transition: background 0.3s ease;
+
+    &:focus-visible {
+        border-color: #b3b3b3;
+    }
+
+    &:hover:not([disabled]) {
+        background: #dbdbdb;
+    }
+
+    &[disabled] {
+        background: #f2f2f2;
+        color: #7f7f7f;
+        opacity: 0.5;
+    }
+
+    &_primary {
+        background: #ffcc00;
+
+        &:focus-visible {
+            border-color: #b38f00;
+        }
+
+        &:hover:not([disabled]) {
+            background: #f2c200;
+        }
+    }
+
+    &_small {
+        height: 28px;
+        padding: 0 6px;
+    }
+
+    &__icon {
+    }
+    &__text {
+        font-size: 13px;
+        // line-height: 36px;
+
+        color: #000;
+    }
+
+    &_has-icon &__text {
+        margin-left: 8px;
+
+        @media screen and (max-width: $md4 + px) {
+            display: none;
+        }
+    }
+    &_icon-only {
+    }
+}

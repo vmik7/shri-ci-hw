@@ -1,0 +1,56 @@
+@mixin color($color) {
+    &-fg {
+        color: $color;
+    }
+    &-bg {
+        background-color: $color;
+    }
+}
+
+.ansi {
+    &-black {
+        @include color(rgb(0, 0, 0));
+    }
+    &-red {
+        @include color(rgb(187, 0, 0));
+    }
+    &-green {
+        @include color(rgb(0, 187, 0));
+    }
+    &-yellow {
+        @include color(rgb(187, 187, 0));
+    }
+    &-blue {
+        @include color(rgb(0, 0, 187));
+    }
+    &-magenta {
+        @include color(rgb(187, 0, 187));
+    }
+    &-cyan {
+        @include color(rgb(0, 187, 187));
+    }
+    &-white {
+        @include color(rgb(255, 255, 255));
+    }
+    &-bold {
+        font-weight: bold;
+    }
+    &-dim {
+        opacity: 0.5;
+    }
+    &-italic {
+        font-style: italic;
+    }
+    &-underline {
+        text-decoration: underline;
+    }
+    &-blink {
+        text-decoration: blink;
+    }
+    &-hidden {
+        visibility: hidden;
+    }
+    &-strikethrough {
+        text-decoration: line-through;
+    }
+}

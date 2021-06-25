@@ -1,0 +1,40 @@
+@import '../../variables.scss';
+
+.settings {
+    &__controls {
+        display: flex;
+        column-gap: 8px;
+        margin-top: 24px;
+
+        @media screen and (max-width: $md4 + px) {
+            flex-direction: column;
+            row-gap: 12px;
+        }
+    }
+    &__button {
+    }
+    &__header {
+    }
+    &__input {
+        max-width: 474px;
+        margin-top: 18px;
+
+        &_inline {
+            margin-top: 20px;
+        }
+    }
+    &__title {
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 20px;
+        color: #000;
+        margin-bottom: 8px;
+    }
+    &__sub-title {
+        font-size: 13px;
+        line-height: 18px;
+        letter-spacing: 0.06px;
+        color: #7f8285;
+        margin-bottom: 6px;
+    }
+}

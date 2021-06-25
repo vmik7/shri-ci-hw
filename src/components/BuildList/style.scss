@@ -1,0 +1,17 @@
+@import '../../variables.scss';
+
+.build-list {
+    &__container {
+        @media screen and (max-width: $md4 + px) {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    &__item {
+        margin-bottom: 8px;
+    }
+
+    &__show-more {
+    }
+}
