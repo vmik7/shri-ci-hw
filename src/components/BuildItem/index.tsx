@@ -23,7 +23,7 @@ export interface BuildItemProps {
     duration?: number;
     classList?: Array<string>;
     isDetailed?: boolean;
-    onClick?(e: React.MouseEvent): void;
+    onClick?: (e: React.MouseEvent) => void;
 }
 
 export default function BuildItem({
