@@ -14,7 +14,7 @@ export default function App() {
                 {routes.map((route) => (
                     <Route exact path={route.path} key={route.path}>
                         <route.component
-                            // loadData={route.loadData}
+                            loadData={route.loadData}
                             contentClass={route.contentClass}
                         />
                     </Route>

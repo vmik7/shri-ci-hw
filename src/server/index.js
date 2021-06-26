@@ -5,7 +5,16 @@ const { apiRouter, mainRouter } = require('./routers');
 const { setUpdateInterval } = require('./util/updateInterval');
 const cloneRepo = require('./util/cloneRepo');
 
+const cors = require('cors');
+
 const app = express();
+
+app.use(
+    cors({
+        origin: ['http://localhost:3000'],
+        methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+    }),
+);
 
 app.use(express.json());
 

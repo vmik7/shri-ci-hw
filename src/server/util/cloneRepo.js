@@ -12,7 +12,13 @@ module.exports = async (repoUrl) => {
             force: true,
         });
         await execFile('git', ['clone', repoUrl, repoFolderName]);
+        return {
+            successful: true,
+        };
     } catch (e) {
-        console.error(e);
+        return {
+            successful: false,
+            error: e.stderr,
+        };
     }
 };

@@ -9,17 +9,27 @@ module.exports = async (req, res) => {
 
     const repoUrl = req.body.repoName;
 
-    try {
-        await axios.post('/conf', req.body, currentConfig);
-
-        cloneRepo(repoUrl);
+    const cloneResult = await cloneRepo(repoUrl);
+    if (cloneResult.successful) {
+        // console.log('clone success!');
 
         global.repoUrl = repoUrl;
         global.updatePeriod = req.body.period;
         setUpdateInterval();
 
-        res.status(200).end();
-    } catch (error) {
-        res.send(error);
+        try {
+            await axios.post('/conf', req.body, currentConfig);
+            res.status(200).send({
+                isSaved: true,
+            });
+        } catch (error) {
+            res.send(error);
+        }
+    } else {
+        // console.log('clone error!');
+        res.status(200).send({
+            isSaved: false,
+            errorMessage: cloneResult.error,
+        });
     }
 };

@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { getBuilds } from '../../store/buildsSlice';
 
 import BuildItem from '../BuildItem';
 import Header from '../Header';
@@ -9,83 +12,98 @@ import NewBuild from '../NewBuild';
 import './style.scss';
 
 import { BuildItemProps } from '../BuildItem';
+import { AsyncThunkAction } from '@reduxjs/toolkit';
 
 interface BuildData extends BuildItemProps {
     id: string;
     configurationId: string;
 }
 
-const builds: BuildData[] = [
-    {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        buildNumber: 1368,
-        commitMessage: 'add documentation for postgres scaler',
-        commitHash: '9c9f0b9',
-        branchName: 'master',
-        authorName: 'Philip Kirkorov',
-        status: 'Success',
-        start: '2021-01-18T05:00:12.000Z',
-        duration: 80,
-    },
-    {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        buildNumber: 1367,
-        commitMessage:
-            'Super cool UI kit for making websites that look like games of old.',
-        commitHash: '952e5567',
-        branchName: 'super-cool-ui-kit',
-        authorName: 'Vadim Makeev',
-        status: 'Waiting',
-    },
-    {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        buildNumber: 1366,
-        commitMessage: 'add documentation for postgres scaler',
-        commitHash: '9c9f0b9',
-        branchName: 'master',
-        authorName: 'Philip Kirkorov',
-        status: 'InProgress',
-        start: '2021-02-18T08:35:41.117Z',
-    },
-    {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        buildNumber: 1365,
-        commitMessage: 'add documentation for postgres scaler',
-        commitHash: '9c9f0b9',
-        branchName: 'master',
-        authorName: 'Philip Kirkorov',
-        status: 'Fail',
-        start: '2021-06-18T08:35:41.117Z',
-        duration: 80,
-    },
-    {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        buildNumber: 1364,
-        commitMessage: 'add documentation for postgres scaler',
-        commitHash: '9c9f0b9',
-        branchName: 'master',
-        authorName: 'Philip Kirkorov',
-        status: 'Canceled',
-        start: '2021-09-18T08:35:41.117Z',
-    },
-];
+// const builds: BuildData[] = [
+//     {
+//         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//         configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//         buildNumber: 1368,
+//         commitMessage: 'add documentation for postgres scaler',
+//         commitHash: '9c9f0b9',
+//         branchName: 'master',
+//         authorName: 'Philip Kirkorov',
+//         status: 'Success',
+//         start: '2021-01-18T05:00:12.000Z',
+//         duration: 80,
+//     },
+//     {
+//         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//         configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//         buildNumber: 1367,
+//         commitMessage:
+//             'Super cool UI kit for making websites that look like games of old.',
+//         commitHash: '952e5567',
+//         branchName: 'super-cool-ui-kit',
+//         authorName: 'Vadim Makeev',
+//         status: 'Waiting',
+//     },
+//     {
+//         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//         configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//         buildNumber: 1366,
+//         commitMessage: 'add documentation for postgres scaler',
+//         commitHash: '9c9f0b9',
+//         branchName: 'master',
+//         authorName: 'Philip Kirkorov',
+//         status: 'InProgress',
+//         start: '2021-02-18T08:35:41.117Z',
+//     },
+//     {
+//         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//         configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//         buildNumber: 1365,
+//         commitMessage: 'add documentation for postgres scaler',
+//         commitHash: '9c9f0b9',
+//         branchName: 'master',
+//         authorName: 'Philip Kirkorov',
+//         status: 'Fail',
+//         start: '2021-06-18T08:35:41.117Z',
+//         duration: 80,
+//     },
+//     {
+//         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//         configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//         buildNumber: 1364,
+//         commitMessage: 'add documentation for postgres scaler',
+//         commitHash: '9c9f0b9',
+//         branchName: 'master',
+//         authorName: 'Philip Kirkorov',
+//         status: 'Canceled',
+//         start: '2021-09-18T08:35:41.117Z',
+//     },
+// ];
 
 export interface BuildListProps {
     contentClass?: Array<string>;
+    loadData(): any;
 }
 
-export default function BuildList({ contentClass = [] }: BuildListProps) {
+export default function BuildList({
+    contentClass = [],
+    loadData,
+}: BuildListProps) {
+    const dispatch = useDispatch();
+    const builds: BuildData[] = useSelector(getBuilds);
+    useEffect(() => {
+        dispatch(loadData());
+    }, [loadData, dispatch]);
+
+    // if (builds === null) {
+    //     return 'loading';
+    // }
+
     let history = useHistory();
     const [modalIsOpen, setOpenStatus] = useState(false);
     const [hash, setHash] = useState('');
 
-    function handleItemClick(number: number) {
-        history.push(`/build/${number}`);
+    function handleItemClick(id: string) {
+        history.push(`/build/${id}`);
     }
 
     return (
@@ -118,17 +136,15 @@ export default function BuildList({ contentClass = [] }: BuildListProps) {
             />
             <div className={['build-list', ...contentClass].join(' ')}>
                 <div className="container build-list__container">
-                    {builds.map((build) => (
-                        <BuildItem
-                            {...build}
-                            key={build.buildNumber}
-                            classList={['build-list__item']}
-                            onClick={handleItemClick.bind(
-                                null,
-                                build.buildNumber,
-                            )}
-                        />
-                    ))}
+                    {builds &&
+                        builds.map((build) => (
+                            <BuildItem
+                                {...build}
+                                key={build.buildNumber}
+                                classList={['build-list__item']}
+                                onClick={handleItemClick.bind(null, build.id)}
+                            />
+                        ))}
                     <Button text="Show more" />
                 </div>
                 {modalIsOpen && (
