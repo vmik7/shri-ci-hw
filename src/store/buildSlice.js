@@ -22,16 +22,39 @@ export const fetchBuildById = createAsyncThunk(
         return { data, logs };
     },
 );
+
+export const fetchRebuild = createAsyncThunk(
+    'buildById/rebuild',
+    async (hash, { extra: { api } }) => {
+        return await api.pushBuild(hash);
+    },
+);
+export const runRebuild = (hash) => fetchRebuild(hash);
+
 export const buildSlice = createSlice({
     name: 'buildById',
-    initialState: {},
+    initialState: {
+        rebuildId: null,
+    },
+    reducers: {
+        openRebuild(state, action) {
+            state.rebuildId = null;
+        },
+    },
     extraReducers: (builder) => {
-        builder.addCase(fetchBuildById.fulfilled, (state, action) => {
-            state[action.payload.data.id] = action.payload;
-        });
+        builder
+            .addCase(fetchBuildById.fulfilled, (state, action) => {
+                state[action.payload.data.id] = action.payload;
+            })
+            .addCase(fetchRebuild.fulfilled, (state, action) => {
+                state.rebuildId = action.payload.data.id;
+            });
     },
 });
 
 export const getBuildById = (id) => (state) => state.buildById[id];
+export const getRebuildId = () => (state) => state.buildById.rebuildId;
 
 export const { reducer: buildByIdReducer } = buildSlice;
+
+export const { openRebuild } = buildSlice.actions;
