@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
     const currentConfig = { ...axiosConfig };
     currentConfig.headers['Content-Type'] = 'application/json';
 
-    const repoUrl = req.body.repoName;
+    const repoUrl = `https://github.com/${req.body.repoName}.git`;
 
     const cloneResult = await cloneRepo(repoUrl);
     if (cloneResult.successful) {

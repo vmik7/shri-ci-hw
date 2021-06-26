@@ -46,6 +46,9 @@ export default function Settings({
         if (!data.buildCommand) {
             return 'Команда для сборки - обязательное поле!';
         }
+        if (!/^[^\/]+\/[a-zA-Z0-9_-]+$/.test(data.repoName)) {
+            return 'Ошибка! Github репозиторий должен быть задан в виде:\n\nимя-пользователя/название-репозитория';
+        }
         return '';
     }
 

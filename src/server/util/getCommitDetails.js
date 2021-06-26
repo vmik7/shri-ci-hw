@@ -8,7 +8,10 @@ const { repoFolderName } = require('../config');
 const execFile = util.promisify(require('child_process').execFile);
 
 module.exports = async (commitHash) => {
-    const result = { commitHash };
+    const result = {
+        successful: true,
+        params: { commitHash },
+    };
 
     try {
         const { stdout: gitBranchOutput } = await execFile(
@@ -22,7 +25,11 @@ module.exports = async (commitHash) => {
             .split('\n')[0]
             .trim();
 
-        result.branchName = branchName;
+        if (branchName) {
+            result.params.branchName = branchName;
+        } else {
+            return { successful: false };
+        }
 
         const divider = uuidv4();
 
@@ -38,9 +45,15 @@ module.exports = async (commitHash) => {
         );
         const currentLog = gitLogOutput.trim().slice(1, -1).split(divider);
 
-        [result.authorName, result.commitMessage] = currentLog;
+        if (currentLog) {
+            [result.params.authorName, result.params.commitMessage] =
+                currentLog;
+        } else {
+            return { successful: false };
+        }
     } catch (e) {
         console.error(e);
+        return { successful: false };
     }
 
     return result;

@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { Api } from '../api';
+import { Api } from '../api/index.ts';
 import { buildByIdReducer } from './buildSlice';
 import { buildsReducer } from './buildsSlice';
+import { newBuillReducer } from './newBuildSlice';
 import { settingsReducer } from './settingsSlice';
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
         builds: buildsReducer,
         buildById: buildByIdReducer,
         settings: settingsReducer,
+        newBuild: newBuillReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

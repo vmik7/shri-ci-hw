@@ -9,10 +9,20 @@ module.exports = async (req, res) => {
     const currentConfig = { ...axiosConfig };
     currentConfig.headers['Content-Type'] = 'application/json';
 
-    const params = await getCommitDetails(commitHash);
+    const { successful, params } = await getCommitDetails(commitHash);
 
-    axios
-        .post('/build/request', params, currentConfig)
-        .then((response) => res.json(response.data))
-        .catch((error) => res.send(error));
+    if (successful) {
+        try {
+            const response = await axios.post(
+                '/build/request',
+                params,
+                currentConfig,
+            );
+            res.json({ isAdded: true, ...response.data });
+        } catch (error) {
+            res.json({ isAdded: false, errorMessage: error });
+        }
+    } else {
+        res.json({ isAdded: false, errorMessage: 'Коммит не найден!' });
+    }
 };

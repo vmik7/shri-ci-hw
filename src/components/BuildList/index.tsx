@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getBuilds } from '../../store/buildsSlice';
+import { getBuilds, openModal } from '../../store/buildsSlice';
+import { getSettingsData, fetchSettings } from '../../store/settingsSlice';
 
 import BuildItem from '../BuildItem';
 import Header from '../Header';
@@ -12,73 +13,17 @@ import NewBuild from '../NewBuild';
 import './style.scss';
 
 import { BuildItemProps } from '../BuildItem';
-import { AsyncThunkAction } from '@reduxjs/toolkit';
 
 interface BuildData extends BuildItemProps {
     id: string;
     configurationId: string;
 }
-
-// const builds: BuildData[] = [
-//     {
-//         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-//         configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-//         buildNumber: 1368,
-//         commitMessage: 'add documentation for postgres scaler',
-//         commitHash: '9c9f0b9',
-//         branchName: 'master',
-//         authorName: 'Philip Kirkorov',
-//         status: 'Success',
-//         start: '2021-01-18T05:00:12.000Z',
-//         duration: 80,
-//     },
-//     {
-//         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-//         configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-//         buildNumber: 1367,
-//         commitMessage:
-//             'Super cool UI kit for making websites that look like games of old.',
-//         commitHash: '952e5567',
-//         branchName: 'super-cool-ui-kit',
-//         authorName: 'Vadim Makeev',
-//         status: 'Waiting',
-//     },
-//     {
-//         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-//         configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-//         buildNumber: 1366,
-//         commitMessage: 'add documentation for postgres scaler',
-//         commitHash: '9c9f0b9',
-//         branchName: 'master',
-//         authorName: 'Philip Kirkorov',
-//         status: 'InProgress',
-//         start: '2021-02-18T08:35:41.117Z',
-//     },
-//     {
-//         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-//         configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-//         buildNumber: 1365,
-//         commitMessage: 'add documentation for postgres scaler',
-//         commitHash: '9c9f0b9',
-//         branchName: 'master',
-//         authorName: 'Philip Kirkorov',
-//         status: 'Fail',
-//         start: '2021-06-18T08:35:41.117Z',
-//         duration: 80,
-//     },
-//     {
-//         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-//         configurationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-//         buildNumber: 1364,
-//         commitMessage: 'add documentation for postgres scaler',
-//         commitHash: '9c9f0b9',
-//         branchName: 'master',
-//         authorName: 'Philip Kirkorov',
-//         status: 'Canceled',
-//         start: '2021-09-18T08:35:41.117Z',
-//     },
-// ];
-
+interface BuildListState {
+    data: BuildData[];
+    isLoading: boolean;
+    isAllLoaded: boolean;
+    isModalOpen: boolean;
+}
 export interface BuildListProps {
     contentClass?: Array<string>;
     loadData(): any;
@@ -89,18 +34,18 @@ export default function BuildList({
     loadData,
 }: BuildListProps) {
     const dispatch = useDispatch();
-    const builds: BuildData[] = useSelector(getBuilds);
+
+    const builds: BuildListState = useSelector(getBuilds);
+    const settings = useSelector(getSettingsData());
+
     useEffect(() => {
         dispatch(loadData());
     }, [loadData, dispatch]);
-
-    // if (builds === null) {
-    //     return 'loading';
-    // }
+    useEffect(() => {
+        dispatch(fetchSettings());
+    }, [dispatch]);
 
     let history = useHistory();
-    const [modalIsOpen, setOpenStatus] = useState(false);
-    const [hash, setHash] = useState('');
 
     function handleItemClick(id: string) {
         history.push(`/build/${id}`);
@@ -109,7 +54,7 @@ export default function BuildList({
     return (
         <>
             <Header
-                title="philip1967/my-awesome-repo"
+                title={settings.repoName}
                 buttons={[
                     {
                         text: 'Run Build',
@@ -118,7 +63,7 @@ export default function BuildList({
                         svg: <svg width="9" height="10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.289 4.193L1.414.128C.855-.202 0 .118 0 .935v8.127a.937.937 0 001.414.806l6.875-4.062a.936.936 0 000-1.613z" fill="#111" /></svg>,
                         isSmall: true,
                         onClick: () => {
-                            setOpenStatus(true);
+                            dispatch(openModal(null));
                         },
                     },
                     {
@@ -136,26 +81,23 @@ export default function BuildList({
             />
             <div className={['build-list', ...contentClass].join(' ')}>
                 <div className="container build-list__container">
-                    {builds &&
-                        builds.map((build) => (
-                            <BuildItem
-                                {...build}
-                                key={build.buildNumber}
-                                classList={['build-list__item']}
-                                onClick={handleItemClick.bind(null, build.id)}
-                            />
-                        ))}
-                    <Button text="Show more" />
+                    {builds.data.map((build) => (
+                        <BuildItem
+                            {...build}
+                            key={build.buildNumber}
+                            classList={['build-list__item']}
+                            onClick={handleItemClick.bind(null, build.id)}
+                        />
+                    ))}
+                    {builds.isLoading && <div>Loading...</div>}
+                    {!builds.isLoading && !builds.isAllLoaded && (
+                        <Button
+                            text="Show more"
+                            onClick={() => dispatch(loadData())}
+                        />
+                    )}
                 </div>
-                {modalIsOpen && (
-                    <NewBuild
-                        onWrapperClick={() => setOpenStatus(false)}
-                        onCancel={() => setOpenStatus(false)}
-                        onSave={() => setOpenStatus(false)}
-                        onInputChange={(value: string) => setHash(value)}
-                        inputValue={hash}
-                    />
-                )}
+                {builds.isModalOpen && <NewBuild />}
             </div>
         </>
     );

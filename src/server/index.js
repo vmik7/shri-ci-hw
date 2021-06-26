@@ -39,10 +39,12 @@ axios
         }
 
         if (repoName) {
-            cloneRepo(repoName);
+            const repoUrl = `https://github.com/${repoName}.git`;
+            global.repoUrl = repoName;
+
+            cloneRepo(repoUrl);
         }
 
-        global.repoUrl = repoName;
         global.updatePeriod = period;
 
         setUpdateInterval();
