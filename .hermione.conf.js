@@ -9,4 +9,8 @@ module.exports = {
             },
         },
     },
+
+    plugins: {
+        'selenium-runner': true,
+    },
 };
