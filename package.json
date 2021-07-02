@@ -37,7 +37,7 @@
     "server": "nodemon --watch src/server src/server/index.js",
     "build": "react-scripts build",
     "test": "jest",
-    "hermione": "npx hermione hermione/hello.hermione.js",
+    "hermione": "npx hermione hermione/",
     "eject": "react-scripts eject",
     "prettify": "prettier src --write",
     "precommit": "lint-staged",
