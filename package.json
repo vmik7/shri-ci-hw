@@ -37,6 +37,7 @@
     "server": "nodemon --watch src/server src/server/index.js",
     "build": "react-scripts build",
     "test": "jest",
+    "hermione": "npx hermione hermione/hello.hermione.js",
     "eject": "react-scripts eject",
     "prettify": "prettier src --write",
     "precommit": "lint-staged",
@@ -63,8 +64,10 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.7",
+    "assert": "^2.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "hermione": "^4.1.1",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "node-sass": "4.14.1",
