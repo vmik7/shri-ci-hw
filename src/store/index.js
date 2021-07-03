@@ -5,6 +5,10 @@ import { buildByIdReducer } from './buildSlice';
 import { buildsReducer } from './buildsSlice';
 import { newBuillReducer } from './newBuildSlice';
 import { settingsReducer } from './settingsSlice';
+import { testModeQuery } from '../server/config';
+
+const params = new URLSearchParams(document.location.search);
+const testMode = !!params.get(testModeQuery);
 
 export const store = configureStore({
     reducer: {
@@ -15,6 +19,6 @@ export const store = configureStore({
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
-            thunk: { extraArgument: { api: new Api() } },
+            thunk: { extraArgument: { api: new Api(testMode) } },
         }),
 });

@@ -1,3 +1,5 @@
+const { testModeQuery } = require('./src/server/config');
+
 module.exports = {
     baseUrl: 'http://localhost:3000/',
     gridUrl: 'http://localhost:4444/wd/hub',
@@ -14,7 +16,7 @@ module.exports = {
         'selenium-runner': true,
         'url-decorator': {
             query: {
-                'test-mode': '1',
+                [testModeQuery]: '1',
             },
         },
         'html-reporter/hermione': {

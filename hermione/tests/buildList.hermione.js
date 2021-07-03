@@ -31,7 +31,7 @@ describe('Главная страница - список сборок.', () => {
 
         // Ждём, пока загрузятся данные для хедера
         // TODO: Так плохо, надо чтобы был SSR и данные были сразу
-        await delay(100);
+        await delay(1000);
 
         await browser.assertView('header', '.header');
     });
@@ -46,5 +46,17 @@ describe('Главная страница - список сборок.', () => {
         await delay(100);
 
         await browser.assertView('footer', '.footer');
+    });
+
+    it('Скриншот всей страницы', async function () {
+        const browser = this.browser;
+
+        await browser.url('/');
+
+        // Ждём, пока загрузятся данные для хедера
+        // TODO: Так плохо, надо чтобы был SSR и данные были сразу
+        await delay(1000);
+
+        await browser.assertView('app', '.app');
     });
 });
