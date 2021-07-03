@@ -12,5 +12,8 @@ module.exports = {
 
     plugins: {
         'selenium-runner': true,
+        'html-reporter/hermione': {
+            path: 'hermione/html-reports',
+        },
     },
 };
