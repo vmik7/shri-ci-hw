@@ -12,6 +12,11 @@ module.exports = {
 
     plugins: {
         'selenium-runner': true,
+        'url-decorator': {
+            query: {
+                'test-mode': '1',
+            },
+        },
         'html-reporter/hermione': {
             path: 'hermione/html-reports',
         },
