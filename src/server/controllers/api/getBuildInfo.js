@@ -1,7 +1,15 @@
 const axios = require('axios');
-const { axiosConfig } = require('../../config');
+const { axiosConfig, testModeQuery } = require('../../config');
+const { getStubBuildById } = require('../../stubs');
 
 module.exports = async (req, res) => {
+    if (req.query[testModeQuery]) {
+        res.json({
+            data: getStubBuildById(req.params.buildId),
+        });
+        return;
+    }
+
     const currentConfig = { ...axiosConfig };
     currentConfig.params = {
         buildId: req.params.buildId,

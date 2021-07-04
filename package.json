@@ -19,6 +19,7 @@
     "ansi-to-react": "^6.1.5",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
+    "delay": "^5.0.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1",
@@ -37,6 +38,7 @@
     "server": "nodemon --watch src/server src/server/index.js",
     "build": "react-scripts build",
     "test": "jest",
+    "hermione": "npx hermione gui hermione/tests --retry 1",
     "eject": "react-scripts eject",
     "prettify": "prettier src --write",
     "precommit": "lint-staged",
@@ -63,8 +65,13 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.7",
+    "assert": "^2.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "hermione": "^4.1.1",
+    "hermione-selenium-runner": "git+https://github.com/vmik7/hermione-selenium-runner.git",
+    "hermione-url-decorator": "git+https://github.com/vmik7/hermione-url-decorator.git",
+    "html-reporter": "^7.0.2",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "node-sass": "4.14.1",
@@ -72,6 +79,7 @@
     "prettier": "^2.3.1",
     "sass-loader": "^10.2.0",
     "typescript": "^4.3.4",
+    "url-decorator": "^2.1.2",
     "yarn": "^1.22.10"
   }
 }

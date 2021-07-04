@@ -1,13 +1,24 @@
-const { PORT } = require('../server/config');
+const { PORT, testModeQuery } = require('../server/config');
 
 const API = `http://localhost:${PORT}/api`;
 
 export class Api {
+    testMode: boolean;
+    constructor(testMode = false) {
+        this.testMode = testMode;
+    }
     async get(url: string, params?: any) {
-        let fullUrl = API + url;
-        if (params) {
-            fullUrl += '?' + new URLSearchParams(params).toString();
+        let searchParams = new URLSearchParams(params);
+
+        if (this.testMode) {
+            searchParams.append(testModeQuery, '1');
         }
+
+        let fullUrl = API + url;
+        if (params || this.testMode) {
+            fullUrl += '?' + searchParams.toString();
+        }
+
         const response = await fetch(fullUrl);
         return await response.json();
     }
