@@ -21,7 +21,7 @@ var data = {
         },
         reportsSaver: null,
     },
-    date: 'Sat Jul 03 2021 16:02:04 GMT+0300 (Москва, стандартное время)',
+    date: 'Sun Jul 04 2021 10:24:22 GMT+0300 (Москва, стандартное время)',
 };
 try {
     module.exports = data;
