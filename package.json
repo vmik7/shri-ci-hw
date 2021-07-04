@@ -60,7 +60,7 @@
     "*.{js,jsx,ts,tsx}": [
       "prettier --write"
     ],
-    "*.{js,css,md}": "prettier --write"
+    "*.{scss,css,md}": "prettier --write"
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.7",
