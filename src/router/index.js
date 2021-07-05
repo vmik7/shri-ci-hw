@@ -1,7 +1,7 @@
-import BuildList from '../components/BuildList';
-import BuildDetails from '../components/BuildDetails';
-import { Settings } from '../components/Settings';
-import Start from '../components/Start';
+import BuildList from '../pages/BuildList';
+import BuildDetails from '../pages/BuildDetails';
+import { Settings } from '../pages/Settings';
+import Start from '../pages/Start';
 
 import { fetchBuilds } from '../store/buildsSlice';
 import { fetchBuildById } from '../store/buildSlice';

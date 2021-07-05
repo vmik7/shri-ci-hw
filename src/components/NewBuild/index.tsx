@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getNewBuildData, setHash, pushBuild } from '../../store/newBuildSlice';
 import { closeModal } from '../../store/buildsSlice';
 
-import Modal from '../generic/Modal';
-import TextField from '../generic/TextField';
-import Button from '../generic/Button';
+import Modal from '../Modal';
+import TextField from '../TextField';
+import Button from '../Button';
 
 import './style.scss';
 interface NewBuildState {
