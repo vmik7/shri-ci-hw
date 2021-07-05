@@ -79,7 +79,10 @@ export default function BuildList({
                     },
                 ]}
             />
-            <div className={['build-list', ...contentClass].join(' ')}>
+            <div
+                className={['build-list', ...contentClass].join(' ')}
+                data-testid="build-list"
+            >
                 <div className="container build-list__container">
                     {builds.data.map((build) => (
                         <BuildItem

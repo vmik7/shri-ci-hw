@@ -36,7 +36,10 @@ export default function Start({ contentClass = [] }: StartProps) {
                     },
                 ]}
             />
-            <div className={['start', ...contentClass].join(' ')}>
+            <div
+                className={['start', ...contentClass].join(' ')}
+                data-testid="start"
+            >
                 <div className="container start__container">
                     <img
                         className="start__image"

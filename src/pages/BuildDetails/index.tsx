@@ -85,8 +85,11 @@ export default function BuildDetails({
                     },
                 ]}
             />
-            {build && (
-                <div className={['build-details', ...contentClass].join(' ')}>
+            <div
+                className={['build-details', ...contentClass].join(' ')}
+                data-testid="build-details"
+            >
+                {build && (
                     <div className="container build-details__container">
                         <BuildItem {...build.data} isDetailed={true} />
                         <BuildLog
@@ -94,8 +97,8 @@ export default function BuildDetails({
                             logs={build.logs}
                         />
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </>
     );
 }

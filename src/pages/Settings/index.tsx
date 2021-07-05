@@ -58,7 +58,10 @@ export const Settings: FC<{
     return (
         <>
             <Header title="School CI server" isFaded={true} />
-            <div className={['settings', ...contentClass].join(' ')}>
+            <div
+                className={['settings', ...contentClass].join(' ')}
+                data-testid="settings"
+            >
                 <div className="container settings__container">
                     <div className="settings__header">
                         <h2 className="settings__title">Settings</h2>
