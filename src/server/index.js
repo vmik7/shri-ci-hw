@@ -1,14 +1,30 @@
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors');
+const morgan = require('morgan');
+
 const { PORT, axiosConfig, minimalUpdateInterval } = require('./config');
 const { apiRouter, mainRouter } = require('./routers');
 const { setUpdateInterval } = require('./util/updateInterval');
 const cloneRepo = require('./util/cloneRepo');
 
-const cors = require('cors');
-
 const app = express();
 
+let accessLogStream = fs.createWriteStream(path.resolve('access.log'), {
+    flags: 'a',
+});
+
+// Logger
+app.use(
+    morgan(':method :url', {
+        stream: accessLogStream,
+        immediate: true,
+    }),
+);
+
+// Cors
 app.use(
     cors({
         origin: ['http://localhost:3000'],
