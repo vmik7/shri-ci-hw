@@ -20,7 +20,7 @@ module.exports = {
             },
         },
         'html-reporter/hermione': {
-            path: 'hermione/html-reports',
+            path: 'html-reporter',
         },
     },
 };
