@@ -52,7 +52,7 @@ export default function NewBuild() {
             title="New build"
             subtitle="Enter the commit hash which you want to build."
             onWrapperClick={() => {
-                dispatch(closeModal(null));
+                dispatch(closeModal());
                 dispatch(setHash(''));
             }}
             content={
@@ -85,7 +85,7 @@ export default function NewBuild() {
                         <Button
                             text="Cancel"
                             onClick={() => {
-                                dispatch(closeModal(null));
+                                dispatch(closeModal());
                                 dispatch(setHash(''));
                             }}
                             disabled={isSubmiting}

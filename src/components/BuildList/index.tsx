@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getBuilds, openModal } from '../../store/buildsSlice';
+import { getBuilds, openModal, moreBuilds } from '../../store/buildsSlice';
 import { getSettingsData, fetchSettings } from '../../store/settingsSlice';
 
 import BuildItem from '../BuildItem';
@@ -63,7 +63,7 @@ export default function BuildList({
                         svg: <svg width="9" height="10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.289 4.193L1.414.128C.855-.202 0 .118 0 .935v8.127a.937.937 0 001.414.806l6.875-4.062a.936.936 0 000-1.613z" fill="#111" /></svg>,
                         isSmall: true,
                         onClick: () => {
-                            dispatch(openModal(null));
+                            dispatch(openModal());
                         },
                     },
                     {
@@ -93,7 +93,7 @@ export default function BuildList({
                     {!builds.isLoading && !builds.isAllLoaded && (
                         <Button
                             text="Show more"
-                            onClick={() => dispatch(loadData())}
+                            onClick={() => dispatch(moreBuilds())}
                         />
                     )}
                 </div>

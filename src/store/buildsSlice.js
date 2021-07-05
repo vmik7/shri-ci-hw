@@ -6,10 +6,24 @@ const buildsCountToLoad = 5;
 
 export const fetchBuilds = createAsyncThunk(
     'builds/fetch',
+    async (_, { extra: { api }, dispatch }) => {
+        const { data } = await api.buildList({
+            limit: buildsCountToLoad,
+            offset: 0,
+        });
+        if (data.length === 0) {
+            dispatch(allLoaded());
+        }
+        return data;
+    },
+);
+
+export const moreBuilds = createAsyncThunk(
+    'builds/more',
     async (_, { extra: { api }, getState, dispatch }) => {
         const { data } = await api.buildList({
             limit: buildsCountToLoad,
-            offset: getState().builds.data.length || 0,
+            offset: getState().builds.data.length,
         });
         if (data.length === 0) {
             dispatch(allLoaded());
@@ -27,24 +41,32 @@ export const buildsSlice = createSlice({
         isModalOpen: false,
     },
     reducers: {
-        allLoaded(state, action) {
+        allLoaded(state) {
             state.isAllLoaded = true;
         },
-        openModal(state, action) {
+        openModal(state) {
             state.isModalOpen = true;
         },
-        closeModal(state, action) {
+        closeModal(state) {
             state.isModalOpen = false;
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchBuilds.pending, (state, action) => {
-            state.isLoading = true;
-        });
-        builder.addCase(fetchBuilds.fulfilled, (state, action) => {
-            state.data.push(...action.payload);
-            state.isLoading = false;
-        });
+        builder
+            .addCase(fetchBuilds.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchBuilds.fulfilled, (state, action) => {
+                state.data = action.payload;
+                state.isLoading = false;
+            })
+            .addCase(moreBuilds.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(moreBuilds.fulfilled, (state, action) => {
+                state.data.push(...action.payload);
+                state.isLoading = false;
+            });
     },
 });
 
