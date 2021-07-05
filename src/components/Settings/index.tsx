@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
@@ -19,15 +19,12 @@ import Header from '../Header';
 import TextField from '../generic/TextField';
 import Button from '../generic/Button';
 
-export interface SettingsProps {
+export const Settings: FC<{
     contentClass?: Array<string>;
     loadData(): any;
-}
+}> = (props) => {
+    const { contentClass = [], loadData } = props;
 
-export default function Settings({
-    contentClass = [],
-    loadData,
-}: SettingsProps) {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(loadData());
@@ -158,4 +155,4 @@ export default function Settings({
             </div>
         </>
     );
-}
+};

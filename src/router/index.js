@@ -1,6 +1,6 @@
 import BuildList from '../components/BuildList';
 import BuildDetails from '../components/BuildDetails';
-import Settings from '../components/Settings';
+import { Settings } from '../components/Settings';
 import Start from '../components/Start';
 
 import { fetchBuilds } from '../store/buildsSlice';
