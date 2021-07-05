@@ -2,9 +2,9 @@ import React from 'react';
 
 import './style.scss';
 
-import Button from '../generic/Button';
+import Button from '../Button';
 
-import { ButtonProps } from '../generic/Button';
+import { ButtonProps } from '../Button';
 
 export interface HeaderProps {
     title: string;

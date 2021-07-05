@@ -7,13 +7,13 @@ import { useParams } from 'react-router-dom';
 import { getBuildById, runRebuild } from '../../store/buildSlice';
 import { getSettingsData, fetchSettings } from '../../store/settingsSlice';
 
-import Header from '../Header';
-import BuildItem from '../BuildItem';
-import BuildLog from '../BuildLog';
+import Header from '../../components/Header';
+import BuildItem from '../../components/BuildItem';
+import BuildLog from '../../components/BuildLog';
 
 import './style.scss';
 
-import { BuildItemProps } from '../BuildItem';
+import { BuildItemProps } from '../../components/BuildItem';
 
 interface BuildData extends BuildItemProps {
     id: string;

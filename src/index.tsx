@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import history from './router/history';
 
-import App from './components/App';
+import App from './App';
 
 import './nullstyle.css';
 import './index.scss';

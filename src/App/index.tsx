@@ -1,9 +1,9 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import { routes } from '../../router';
+import { routes } from '../router';
 
-import Footer from '../Footer';
+import Footer from '../components/Footer';
 
 import './style.scss';
 

@@ -5,14 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getBuilds, openModal, moreBuilds } from '../../store/buildsSlice';
 import { getSettingsData, fetchSettings } from '../../store/settingsSlice';
 
-import BuildItem from '../BuildItem';
-import Header from '../Header';
-import Button from '../generic/Button';
-import NewBuild from '../NewBuild';
+import BuildItem from '../../components/BuildItem';
+import Header from '../../components/Header';
+import Button from '../../components/Button';
+import NewBuild from '../../components/NewBuild';
 
 import './style.scss';
 
-import { BuildItemProps } from '../BuildItem';
+import { BuildItemProps } from '../../components/BuildItem';
 
 interface BuildData extends BuildItemProps {
     id: string;
