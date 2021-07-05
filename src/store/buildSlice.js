@@ -23,11 +23,6 @@ export const runRebuild = ({ hash, history }) =>
 export const buildSlice = createSlice({
     name: 'buildById',
     initialState: {},
-    reducers: {
-        openRebuild(state, action) {
-            state.rebuildId = null;
-        },
-    },
     extraReducers: (builder) => {
         builder.addCase(fetchBuildById.fulfilled, (state, action) => {
             state[action.payload.data.id] = action.payload;
