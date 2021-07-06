@@ -10,6 +10,7 @@ import App from './App';
 
 import './nullstyle.css';
 import './index.scss';
+import './counter';
 
 ReactDOM.render(
     <BrowserRouter>
