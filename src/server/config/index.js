@@ -2,7 +2,7 @@ require('dotenv').config();
 
 module.exports = {
     PORT: 8085,
-    testModeQuery: 'test-mode',
+    testModeQuery: 'test_mode',
     repoFolderName: 'myrepo',
     axiosConfig: {
         baseURL: 'https://shri.yandex/hw/api',
