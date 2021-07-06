@@ -14,6 +14,9 @@ export const fetchBuilds = createAsyncThunk(
         if (data.length === 0) {
             dispatch(allLoaded());
         }
+
+        dispatchEvent(new Event('buildListLoaded'));
+
         return data;
     },
 );
@@ -21,6 +24,8 @@ export const fetchBuilds = createAsyncThunk(
 export const moreBuilds = createAsyncThunk(
     'builds/more',
     async (_, { extra: { api }, getState, dispatch }) => {
+        dispatchEvent(new Event('showMoreButtonPressed'));
+
         const { data } = await api.buildList({
             limit: buildsCountToLoad,
             offset: getState().builds.data.length,

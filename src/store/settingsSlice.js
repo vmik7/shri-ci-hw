@@ -4,6 +4,9 @@ export const fetchSettings = createAsyncThunk(
     'settings/fetch',
     async (_, { extra: { api } }) => {
         const { data } = await api.getSettings();
+
+        dispatchEvent(new Event('settingsLoaded'));
+
         return {
             repoName: data.repoName,
             buildCommand: data.buildCommand,
