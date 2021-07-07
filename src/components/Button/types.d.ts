@@ -1,11 +1,11 @@
 import { IComponentProps } from '../../common';
 
 export interface IButtonProps
-    extends React.DetailedHTMLProps<
+    extends IComponentProps,
+        React.DetailedHTMLProps<
             React.ButtonHTMLAttributes<HTMLButtonElement>,
             HTMLButtonElement
-        >,
-        IComponentProps {
+        > {
     text: string;
     hasIcon?: boolean;
     iconOnly?: boolean;
