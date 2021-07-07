@@ -1,28 +1,32 @@
-import React from 'react';
+import { FC } from 'react';
 import { useHistory } from 'react-router';
+import { cn } from '../../common';
+import { classnames } from '@bem-react/classnames';
 
 import { Button } from '../../components/Button';
 import { Header } from '../../components/Header';
 
+import { IStartProps } from './types';
+
 import './style.scss';
 import iconSettings from './icons/settings.svg';
 
-export interface StartProps {
-    contentClass?: Array<string>;
-}
+export const Start: FC<IStartProps> = (props) => {
+    const { contentClass } = props;
 
-export default function Start({ contentClass = [] }: StartProps) {
-    let history = useHistory();
+    const history = useHistory();
 
     const openSettings = () => {
         history.push('/settings');
     };
 
+    const cnStart = cn('start');
+
     return (
         <>
             <Header
                 title="School CI server"
-                isFaded={true}
+                isFaded
                 buttons={[
                     {
                         text: 'Settings',
@@ -37,21 +41,21 @@ export default function Start({ contentClass = [] }: StartProps) {
                 ]}
             />
             <div
-                className={['start', ...contentClass].join(' ')}
+                className={classnames(cnStart(), contentClass)}
                 data-testid="start"
             >
-                <div className="container start__container">
+                <div className={classnames(cnStart('container'), 'container')}>
                     <img
-                        className="start__image"
+                        className={cnStart('image')}
                         src={iconSettings}
                         alt="Settings"
                     />
-                    <p className="start__label">
+                    <p className={cnStart('label')}>
                         Configure repository connection and synchronization
                         settings
                     </p>
                     <Button
-                        isPrimary={true}
+                        isPrimary
                         text="Open settings"
                         onClick={openSettings}
                     />
@@ -59,4 +63,4 @@ export default function Start({ contentClass = [] }: StartProps) {
             </div>
         </>
     );
-}
+};

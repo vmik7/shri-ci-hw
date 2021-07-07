@@ -3,7 +3,7 @@ import { IRoute } from './types';
 import { BuildList } from '../pages/BuildList';
 import { BuildDetails } from '../pages/BuildDetails';
 import { Settings } from '../pages/Settings';
-import Start from '../pages/Start';
+import { Start } from '../pages/Start';
 
 import { fetchBuilds } from '../store/buildsSlice';
 import { runFetchBuildById } from '../store/buildSlice';
