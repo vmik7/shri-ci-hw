@@ -1,30 +1,38 @@
-import React from 'react';
+import { FC } from 'react';
+import { cn } from '../../styles';
+import { classnames } from '@bem-react/classnames';
+
+import { IFooterProps } from './types';
 
 import './style.scss';
 
-export default function Footer() {
+export const Footer: FC<IFooterProps> = (props) => {
+    const { extraClasses = '' } = props;
+
+    const cnFooter = cn('footer');
+
     return (
-        <footer className="footer">
-            <div className="container footer__container">
-                <ul className="footer__list">
-                    <li className="footer__item">
-                        <a href="*" className="footer__link">
+        <footer className={classnames(cnFooter(), extraClasses)}>
+            <div className={classnames(cnFooter('container'), 'container')}>
+                <ul className={cnFooter('list')}>
+                    <li className={cnFooter('item')}>
+                        <a href="*" className={cnFooter('link')}>
                             Support
                         </a>
                     </li>
-                    <li className="footer__item">
-                        <a href="*" className="footer__link">
+                    <li className={cnFooter('item')}>
+                        <a href="*" className={cnFooter('link')}>
                             Learning
                         </a>
                     </li>
-                    <li className="footer__item">
-                        <a href="*" className="footer__link">
+                    <li className={cnFooter('item')}>
+                        <a href="*" className={cnFooter('link')}>
                             Русская версия
                         </a>
                     </li>
                 </ul>
-                <p className="footer__copyright">© 2020 Your Name</p>
+                <p className={cnFooter('copyright')}>© 2020 Your Name</p>
             </div>
         </footer>
     );
-}
+};
