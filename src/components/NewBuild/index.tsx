@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getNewBuildData, setHash, pushBuild } from '../../store/newBuildSlice';
 import { closeModal } from '../../store/buildsSlice';
 
-import Modal from '../Modal';
+import { Modal } from '../Modal';
 import TextField from '../TextField';
 import { Button } from '../Button';
 
@@ -48,7 +48,7 @@ export default function NewBuild() {
 
     return (
         <Modal
-            classList={['new-build']}
+            extraClasses="new-build"
             title="New build"
             subtitle="Enter the commit hash which you want to build."
             onWrapperClick={() => {
