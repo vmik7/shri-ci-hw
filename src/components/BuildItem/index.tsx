@@ -1,5 +1,7 @@
 import { FC } from 'react';
 import { classnames } from '@bem-react/classnames';
+import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 import { cn } from '../../styles';
 import { IBuildItemProps } from './types';
@@ -24,38 +26,9 @@ export const BuildItem: FC<IBuildItemProps> = (props) => {
         onClick = () => {},
     } = props;
 
-    const monthNames = [
-        'янв',
-        'фев',
-        'мар',
-        'апр',
-        'мая',
-        'июня',
-        'июля',
-        'авг',
-        'сент',
-        'окт',
-        'нояб',
-        'дек',
-    ];
-
-    function getTimeString(start: string) {
-        const startDate = new Date(start);
-
-        let hours: string = startDate.getHours().toString();
-        if (+hours < 10) {
-            hours = '0' + hours;
-        }
-
-        let minutes: string = startDate.getMinutes().toString();
-        if (+minutes < 10) {
-            minutes = '0' + minutes;
-        }
-
-        return `${startDate.getDate()} ${
-            monthNames[startDate.getMonth()]
-        }, ${hours}:${minutes}`;
-    }
+    const getTimeString = (start: string) => {
+        return format(new Date(start), 'd MMMM, HH:mm', { locale: ru });
+    };
 
     function getDurationString(duration: number) {
         let durationHours = Math.floor(duration / 60);

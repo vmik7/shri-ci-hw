@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { setHash } from './newBuildSlice';
 
-const buildsCountToLoad = 5;
+const buildsCountToLoad = 10;
 
 export const fetchBuilds = createAsyncThunk(
     'builds/fetch',
