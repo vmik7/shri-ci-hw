@@ -1,7 +1,4 @@
-import { IComponentProps } from '../../common';
+import { IPageProps } from '../../common';
 import { IBuildItemProps } from '../../components/BuildItem/types';
 
-export interface IBuildDetailsProps extends IComponentProps {
-    contentClass?: string;
-    loadData(id: string): any;
-}
+export interface IBuildDetailsProps extends IPageProps {}

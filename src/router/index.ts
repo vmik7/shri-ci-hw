@@ -1,6 +1,6 @@
 import { IRoute } from './types';
 
-import BuildList from '../pages/BuildList';
+import { BuildList } from '../pages/BuildList';
 import { BuildDetails } from '../pages/BuildDetails';
 import { Settings } from '../pages/Settings';
 import Start from '../pages/Start';
