@@ -1,4 +1,4 @@
-import { IComponentProps } from '../../common';
+import { IComponentProps } from '../../common/types';
 
 export type BuildStatus =
     | 'Success'

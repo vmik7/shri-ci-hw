@@ -1,7 +1,7 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { classnames } from '@bem-react/classnames';
 
-import { cn } from '../../common';
+import { cn } from '../../common/';
 import { IButtonProps } from './types';
 
 import './style.scss';
@@ -10,16 +10,27 @@ export const Button: FC<IButtonProps> = (props) => {
     const {
         text,
         svg,
-        hasIcon = false,
-        iconOnly = false,
-        isPrimary = false,
-        isSmall = false,
-        extraClasses = '',
+        hasIcon,
+        iconOnly,
+        isPrimary,
+        isSmall,
+        extraClasses,
         onClick,
         ...buttonProps
     } = props;
 
     const cnButton = cn('button');
+
+    const iconMemo = useMemo(
+        () =>
+            hasIcon ? <span className={cnButton('icon')}>{svg}</span> : null,
+        [hasIcon, svg, cnButton],
+    );
+    const textMemo = useMemo(
+        () =>
+            !iconOnly ? <span className={cnButton('text')}>{text}</span> : null,
+        [iconOnly, text, cnButton],
+    );
 
     return (
         <button
@@ -35,8 +46,8 @@ export const Button: FC<IButtonProps> = (props) => {
             onClick={onClick}
             {...buttonProps}
         >
-            {hasIcon && <span className={cnButton('icon')}>{svg}</span>}
-            {!iconOnly && <span className={cnButton('text')}>{text}</span>}
+            {iconMemo}
+            {textMemo}
         </button>
     );
 };

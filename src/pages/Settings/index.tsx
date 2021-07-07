@@ -1,7 +1,7 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { cn } from '../../common';
+import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
 
 import { Header } from '../../components/Header';
@@ -29,7 +29,7 @@ export const Settings: FC<ISettingsProps> = (props) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(loadData());
+        loadData(dispatch);
     }, [dispatch]);
 
     const data = useSelector(getSettingsData());
@@ -59,6 +59,44 @@ export const Settings: FC<ISettingsProps> = (props) => {
         );
     }
 
+    const onRepositoryChange = useCallback(
+        (value) => dispatch(setRepoName(value)),
+        [dispatch],
+    );
+    const onBuildCommandChange = useCallback(
+        (value) => dispatch(setBuildCommand(value)),
+        [dispatch],
+    );
+    const onMainBranchChange = useCallback(
+        (value) => dispatch(setMainBranch(value)),
+        [dispatch],
+    );
+    const onPeriodChange = useCallback(
+        (value) => {
+            value = value.trim();
+            if (/^[0-9]*$/.test(value)) {
+                dispatch(setPeriod(+value));
+            }
+        },
+        [dispatch],
+    );
+
+    const onSaveHandler = useCallback(
+        (e) => {
+            e.preventDefault();
+            const errorMessage = validate();
+            if (errorMessage) {
+                alert(errorMessage);
+            } else {
+                dispatch(setSettings());
+            }
+        },
+        [validate, dispatch],
+    );
+    const onCancelHandler = useCallback(() => {
+        history.push('/');
+    }, [history]);
+
     return (
         <>
             <Header title="School CI server" isFaded={true} />
@@ -85,7 +123,7 @@ export const Settings: FC<ISettingsProps> = (props) => {
                             required
                             extraClasses={cnSettings('input')}
                             name="repo"
-                            onChange={(value) => dispatch(setRepoName(value))}
+                            onChange={onRepositoryChange}
                         />
                         <TextField
                             value={data ? data.buildCommand : ''}
@@ -95,9 +133,7 @@ export const Settings: FC<ISettingsProps> = (props) => {
                             required
                             extraClasses={cnSettings('input')}
                             name="build"
-                            onChange={(value) =>
-                                dispatch(setBuildCommand(value))
-                            }
+                            onChange={onBuildCommandChange}
                         />
                         <TextField
                             value={data ? data.mainBranch : ''}
@@ -106,24 +142,16 @@ export const Settings: FC<ISettingsProps> = (props) => {
                             labelText="Main branch"
                             extraClasses={cnSettings('input')}
                             name="branch"
-                            onChange={(value) => dispatch(setMainBranch(value))}
+                            onChange={onMainBranchChange}
                         />
                         <div className={cnSettings('input', { inline: true })}>
                             Synchronize every
                             <TextField
-                                value={(data
-                                    ? data.period || ''
-                                    : ''
-                                ).toString()}
+                                value={data && data.period ? data.period : ''}
                                 placeholder="10"
                                 isInline={true}
                                 name="period"
-                                onChange={(value: string) => {
-                                    value = value.trim();
-                                    if (/^[0-9]*$/.test(value)) {
-                                        dispatch(setPeriod(+value));
-                                    }
-                                }}
+                                onChange={onPeriodChange}
                             />
                             minutes
                         </div>
@@ -134,15 +162,7 @@ export const Settings: FC<ISettingsProps> = (props) => {
                                 extraClasses={cnSettings('button', {
                                     action: 'save',
                                 })}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    const errorMessage = validate();
-                                    if (errorMessage) {
-                                        alert(errorMessage);
-                                    } else {
-                                        dispatch(setSettings());
-                                    }
-                                }}
+                                onClick={onSaveHandler}
                                 disabled={saveStatus.isSaving}
                             />
                             <Button
@@ -150,9 +170,7 @@ export const Settings: FC<ISettingsProps> = (props) => {
                                 extraClasses={cnSettings('button', {
                                     action: 'cancel',
                                 })}
-                                onClick={() => {
-                                    history.push('/');
-                                }}
+                                onClick={onCancelHandler}
                                 disabled={saveStatus.isSaving}
                             />
                         </div>

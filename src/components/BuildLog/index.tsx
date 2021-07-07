@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { cn } from '../../common';
+import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
 import Ansi from 'ansi-to-react';
 
@@ -9,7 +9,7 @@ import './style.scss';
 import './ansi.scss';
 
 export const BuildLog: FC<IBuildLogProps> = (props) => {
-    const { logs = '', extraClasses = '' } = props;
+    const { logs, extraClasses } = props;
 
     const cnBuildLog = cn('build-log');
 

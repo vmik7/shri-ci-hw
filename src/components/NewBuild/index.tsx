@@ -1,7 +1,7 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { cn } from '../../common';
+import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
 
 import { getNewBuildData, setHash, pushBuild } from '../../store/newBuildSlice';
@@ -16,7 +16,7 @@ import { INewBuildProps, INewBuildState } from './types';
 import './style.scss';
 
 export const NewBuild: FC<INewBuildProps> = (props) => {
-    const { extraClasses = '' } = props;
+    const { extraClasses } = props;
 
     const dispatch = useDispatch();
     const {
@@ -46,33 +46,43 @@ export const NewBuild: FC<INewBuildProps> = (props) => {
         history.push(`/build/${newBuildId}`);
     }
 
+    const onCancelHandler = useCallback(() => {
+        dispatch(closeModal());
+        dispatch(setHash(''));
+    }, [dispatch]);
+
+    const onSubmitHandler = useCallback(
+        (e) => {
+            e.preventDefault();
+            const errorMessage = validate();
+            if (errorMessage) {
+                alert(errorMessage);
+            } else {
+                dispatch(pushBuild());
+            }
+        },
+        [validate, dispatch],
+    );
+
+    const onChangeHandler = useCallback(
+        (value) => dispatch(setHash(value)),
+        [dispatch],
+    );
+
     return (
         <Modal
             extraClasses={classnames(cnNewBuild(), extraClasses)}
             title="New build"
             subtitle="Enter the commit hash which you want to build."
-            onWrapperClick={() => {
-                dispatch(closeModal());
-                dispatch(setHash(''));
-            }}
+            onWrapperClick={onCancelHandler}
             content={
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        const errorMessage = validate();
-                        if (errorMessage) {
-                            alert(errorMessage);
-                        } else {
-                            dispatch(pushBuild());
-                        }
-                    }}
-                >
+                <form onSubmit={onSubmitHandler}>
                     <TextField
                         placeholder="Commit hash"
                         required
                         extraClasses={cnNewBuild('input')}
                         name="hash"
-                        onChange={(value) => dispatch(setHash(value))}
+                        onChange={onChangeHandler}
                         value={hash}
                     />
                     <div className={cnNewBuild('controls')}>
@@ -84,10 +94,7 @@ export const NewBuild: FC<INewBuildProps> = (props) => {
                         />
                         <Button
                             text="Cancel"
-                            onClick={() => {
-                                dispatch(closeModal());
-                                dispatch(setHash(''));
-                            }}
+                            onClick={onCancelHandler}
                             disabled={isSubmiting}
                         />
                     </div>
