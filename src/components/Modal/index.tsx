@@ -1,5 +1,5 @@
-import { FC, useRef } from 'react';
-import { cn } from '../../common';
+import { FC, useCallback, useMemo, useRef } from 'react';
+import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
 
 import { IModalProps } from './types';
@@ -7,33 +7,42 @@ import { IModalProps } from './types';
 import './style.scss';
 
 export const Modal: FC<IModalProps> = (props) => {
-    const {
-        title,
-        subtitle,
-        content = null,
-        extraClasses = '',
-        onWrapperClick,
-    } = props;
+    const { title, subtitle, content, extraClasses, onWrapperClick } = props;
 
     const cnModal = cn('modal');
     const wrapperEl = useRef(null);
+
+    const wrapperClicHandler = useCallback(
+        (event) => {
+            if (event.target === wrapperEl.current) {
+                onWrapperClick(event);
+            }
+        },
+        [wrapperEl],
+    );
+
+    const titleMemo = useMemo(
+        () => (title ? <p className={cnModal('title')}>{title}</p> : null),
+        [title, cnModal],
+    );
+    const subtitleMemo = useMemo(
+        () =>
+            subtitle ? (
+                <p className={cnModal('subtitle')}>{subtitle} </p>
+            ) : null,
+        [subtitle, cnModal],
+    );
 
     return (
         <div className={classnames(cnModal(), extraClasses)}>
             <div
                 ref={wrapperEl}
                 className={cnModal('wrapper')}
-                onClick={(e) => {
-                    if (e.target === wrapperEl.current) {
-                        onWrapperClick();
-                    }
-                }}
+                onClick={wrapperClicHandler}
             >
                 <div className={cnModal('window')}>
-                    {title && <p className={cnModal('title')}>{title}</p>}
-                    {subtitle && (
-                        <p className={cnModal('subtitle')}>{subtitle} </p>
-                    )}
+                    {titleMemo}
+                    {subtitleMemo}
                     {content}
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { IComponentProps } from '../../common';
+import { IComponentProps } from '../../common/types';
 
 export interface ITextFieldProps
     extends IComponentProps,

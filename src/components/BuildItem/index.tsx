@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { classnames } from '@bem-react/classnames';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
-import { cn } from '../../common';
+import { cn } from '../../common/';
 import { IBuildItemProps } from './types';
 
 import './style.scss';
@@ -21,25 +21,38 @@ export const BuildItem: FC<IBuildItemProps> = (props) => {
         status,
         start,
         duration,
-        extraClasses = '',
-        isDetailed = false,
-        onClick = () => {},
+        extraClasses,
+        isDetailed,
+        onClick,
     } = props;
 
-    const getTimeString = (start: string) => {
-        return format(new Date(start), 'd MMMM, HH:mm', { locale: ru });
-    };
-
-    function getDurationString(duration: number) {
-        let durationHours = Math.floor(duration / 60);
-        let durationMinutes = duration % 60;
-
-        return `${
-            durationHours ? durationHours + ' ч ' : ''
-        }${durationMinutes} мин`;
-    }
-
     const cnBuildItem = cn('build-item');
+
+    const startMemo = useMemo(
+        () =>
+            start ? (
+                <div className={cnBuildItem('time')}>
+                    {format(new Date(start), 'd MMMM, HH:mm', { locale: ru })}
+                </div>
+            ) : null,
+        [start, cnBuildItem, format, ru],
+    );
+
+    const durationMemo = useMemo(
+        () =>
+            duration ? (
+                <div className={cnBuildItem('duration')}>
+                    {(() => {
+                        const durationHours = Math.floor(duration / 60);
+                        const durationMinutes = duration % 60;
+                        return `${
+                            durationHours ? durationHours + ' ч ' : ''
+                        }${durationMinutes} мин`;
+                    })()}
+                </div>
+            ) : null,
+        [duration, cnBuildItem, format, ru],
+    );
 
     let statusMod, icon;
     switch (status) {
@@ -93,16 +106,8 @@ export const BuildItem: FC<IBuildItemProps> = (props) => {
                 </div>
             </div>
             <footer className={cnBuildItem('footer')}>
-                {start && (
-                    <div className={cnBuildItem('time')}>
-                        {getTimeString(start)}
-                    </div>
-                )}
-                {duration && (
-                    <div className={cnBuildItem('duration')}>
-                        {getDurationString(duration)}
-                    </div>
-                )}
+                {startMemo}
+                {durationMemo}
             </footer>
         </article>
     );

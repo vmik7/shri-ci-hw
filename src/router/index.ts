@@ -14,7 +14,10 @@ export const routes: IRoute[] = [
         path: '/',
         component: BuildList,
         contentClass: 'app__content',
-        loadData: () => fetchBuilds(),
+        loadData: (dispatch) => {
+            dispatch(fetchSettings());
+            dispatch(fetchBuilds());
+        },
     },
     {
         path: '/start',
@@ -26,12 +29,17 @@ export const routes: IRoute[] = [
         path: '/build/:id',
         component: BuildDetails,
         contentClass: 'app__content',
-        loadData: (id) => runFetchBuildById(id),
+        loadData: (dispatch, id) => {
+            dispatch(fetchSettings());
+            dispatch(runFetchBuildById(id));
+        },
     },
     {
         path: '/settings',
         component: Settings,
         contentClass: 'app__content',
-        loadData: () => fetchSettings(),
+        loadData: (dispatch) => {
+            dispatch(fetchSettings());
+        },
     },
 ];

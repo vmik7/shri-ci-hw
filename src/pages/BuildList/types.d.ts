@@ -1,4 +1,4 @@
-import { IPageProps } from '../../common';
+import { IPageProps } from '../../common/types';
 import { IBuildItemProps } from '../../components/BuildItem/types';
 
 interface IBuildData extends IBuildItemProps {
