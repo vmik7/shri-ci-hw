@@ -1,25 +1,23 @@
-import React from 'react';
+import { FC } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
+import { cn } from '../../common';
+import { classnames } from '@bem-react/classnames';
 
 import { getNewBuildData, setHash, pushBuild } from '../../store/newBuildSlice';
 import { closeModal } from '../../store/buildsSlice';
 
-import Modal from '../Modal';
-import TextField from '../TextField';
-import Button from '../Button';
+import { Modal } from '../Modal';
+import { TextField } from '../TextField';
+import { Button } from '../Button';
+
+import { INewBuildProps, INewBuildState } from './types';
 
 import './style.scss';
-interface NewBuildState {
-    hash: string;
-    isSubmiting: boolean;
-    isSubmited: boolean;
-    isSubmitError: boolean;
-    submitError: null | string;
-    newBuildId: null | string;
-}
 
-export default function NewBuild() {
+export const NewBuild: FC<INewBuildProps> = (props) => {
+    const { extraClasses = '' } = props;
+
     const dispatch = useDispatch();
     const {
         hash,
@@ -27,9 +25,11 @@ export default function NewBuild() {
         isSubmitError,
         submitError,
         newBuildId,
-    }: NewBuildState = useSelector(getNewBuildData);
+    }: INewBuildState = useSelector(getNewBuildData);
 
     let history = useHistory();
+
+    const cnNewBuild = cn('new-build');
 
     function validate() {
         if (!/^[a-z0-9]+$/.test(hash)) {
@@ -48,7 +48,7 @@ export default function NewBuild() {
 
     return (
         <Modal
-            classList={['new-build']}
+            extraClasses={classnames(cnNewBuild(), extraClasses)}
             title="New build"
             subtitle="Enter the commit hash which you want to build."
             onWrapperClick={() => {
@@ -69,13 +69,13 @@ export default function NewBuild() {
                 >
                     <TextField
                         placeholder="Commit hash"
-                        isRequired={true}
-                        classList={['new-build__input']}
+                        required
+                        extraClasses={cnNewBuild('input')}
                         name="hash"
                         onChange={(value) => dispatch(setHash(value))}
                         value={hash}
                     />
-                    <div className="new-build__controls">
+                    <div className={cnNewBuild('controls')}>
                         <Button
                             isPrimary={true}
                             text="Run build"
@@ -95,4 +95,4 @@ export default function NewBuild() {
             }
         />
     );
-}
+};

@@ -1,43 +1,42 @@
-import React, { useRef } from 'react';
+import { FC, useRef } from 'react';
+import { cn } from '../../common';
+import { classnames } from '@bem-react/classnames';
+
+import { IModalProps } from './types';
 
 import './style.scss';
 
-export interface ModalProps {
-    title?: string;
-    subtitle?: string;
-    content?: React.ReactNode;
-    classList?: Array<string>;
-    onWrapperClick: () => void;
-}
+export const Modal: FC<IModalProps> = (props) => {
+    const {
+        title,
+        subtitle,
+        content = null,
+        extraClasses = '',
+        onWrapperClick,
+    } = props;
 
-function Modal({
-    title,
-    subtitle,
-    content = '',
-    classList = [],
-    onWrapperClick,
-}: ModalProps) {
+    const cnModal = cn('modal');
     const wrapperEl = useRef(null);
 
     return (
-        <div className={['modal', ...classList].join(' ')}>
+        <div className={classnames(cnModal(), extraClasses)}>
             <div
                 ref={wrapperEl}
-                className="modal__wrapper"
+                className={cnModal('wrapper')}
                 onClick={(e) => {
                     if (e.target === wrapperEl.current) {
                         onWrapperClick();
                     }
                 }}
             >
-                <div className="modal__window">
-                    {title && <p className="modal__title">{title}</p>}
-                    {subtitle && <p className="modal__subtitle">{subtitle} </p>}
+                <div className={cnModal('window')}>
+                    {title && <p className={cnModal('title')}>{title}</p>}
+                    {subtitle && (
+                        <p className={cnModal('subtitle')}>{subtitle} </p>
+                    )}
                     {content}
                 </div>
             </div>
         </div>
     );
-}
-
-export default Modal;
+};

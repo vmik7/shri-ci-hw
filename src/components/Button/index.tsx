@@ -1,58 +1,42 @@
-import React from 'react';
+import { FC } from 'react';
+import { classnames } from '@bem-react/classnames';
+
+import { cn } from '../../common';
+import { IButtonProps } from './types';
 
 import './style.scss';
 
-export interface ButtonProps
-    extends React.DetailedHTMLProps<
-        React.ButtonHTMLAttributes<HTMLButtonElement>,
-        HTMLButtonElement
-    > {
-    text: string;
-    hasIcon?: boolean;
-    iconOnly?: boolean;
-    svg?: React.ReactElement;
-    isPrimary?: boolean;
-    isSmall?: boolean;
-    isDisabled?: boolean;
-    classList?: Array<string>;
-    onClick?: (e: React.MouseEvent) => void;
-}
+export const Button: FC<IButtonProps> = (props) => {
+    const {
+        text,
+        svg,
+        hasIcon = false,
+        iconOnly = false,
+        isPrimary = false,
+        isSmall = false,
+        extraClasses = '',
+        onClick,
+        ...buttonProps
+    } = props;
 
-export default function Button({
-    text = 'Click me!',
-    hasIcon = false,
-    iconOnly = false,
-    svg,
-    isPrimary = false,
-    isSmall = false,
-    isDisabled = false,
-    classList = [],
-    onClick,
-    ...props
-}: ButtonProps) {
-    let classArray = ['button', ...classList];
-    if (isPrimary) {
-        classArray.push('button_primary');
-    }
-    if (isSmall) {
-        classArray.push('button_small');
-    }
-    if (hasIcon) {
-        classArray.push('button_has-icon');
-    }
-    if (iconOnly) {
-        classArray.push('button_icon-only');
-    }
+    const cnButton = cn('button');
 
     return (
         <button
-            className={classArray.join(' ')}
+            className={classnames(
+                cnButton({
+                    primary: isPrimary,
+                    small: isSmall,
+                    'has-icon': hasIcon,
+                    'icon-only': iconOnly,
+                }),
+                extraClasses,
+            )}
             onClick={onClick}
-            disabled={isDisabled}
-            {...props}
+            {...buttonProps}
         >
-            {hasIcon && <span className="button__icon">{svg}</span>}
-            {!iconOnly && <span className="button__text">{text}</span>}
+            {hasIcon && <span className={cnButton('icon')}>{svg}</span>}
+            {!iconOnly && <span className={cnButton('text')}>{text}</span>}
         </button>
     );
-}
+};

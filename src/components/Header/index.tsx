@@ -1,39 +1,35 @@
-import React from 'react';
+import { FC } from 'react';
+import { cn } from '../../common';
+import { classnames } from '@bem-react/classnames';
+
+import { Button } from '../Button';
+
+import { IHeaderProps } from './types';
 
 import './style.scss';
 
-import Button from '../Button';
+export const Header: FC<IHeaderProps> = (props) => {
+    const { title, isFaded = false, buttons = [], extraClasses = '' } = props;
 
-import { ButtonProps } from '../Button';
-
-export interface HeaderProps {
-    title: string;
-    isFaded?: boolean;
-    buttons?: Array<ButtonProps>;
-}
-
-export default function Header({
-    title,
-    isFaded = false,
-    buttons = [],
-}: HeaderProps) {
-    let classArray = ['header'];
-    if (isFaded) {
-        classArray.push('header_faded');
-    }
+    const cnHeader = cn('header');
 
     return (
-        <header className={classArray.join(' ')}>
-            <div className="container header__container">
-                <h1 className="header__title">{title}</h1>
-                {buttons.map((buttonProps, index) => (
+        <header
+            className={classnames(cnHeader({ faded: isFaded }), extraClasses)}
+        >
+            <div className={classnames(cnHeader('container'), 'container')}>
+                <h1 className={cnHeader('title')}>{title}</h1>
+                {buttons.map((buttonProps) => (
                     <Button
                         {...buttonProps}
-                        key={index}
-                        classList={['header__control']}
+                        key={buttonProps.text}
+                        extraClasses={classnames(
+                            cnHeader('control'),
+                            buttonProps.extraClasses,
+                        )}
                     />
                 ))}
             </div>
         </header>
     );
-}
+};

@@ -1,18 +1,21 @@
-import React from 'react';
+import { FC } from 'react';
+import { cn } from '../../common';
+import { classnames } from '@bem-react/classnames';
 import Ansi from 'ansi-to-react';
+
+import { IBuildLogProps } from './types';
 
 import './style.scss';
 import './ansi.scss';
 
-export interface BuildLogProps {
-    logs?: string;
-    classList?: Array<string>;
-}
+export const BuildLog: FC<IBuildLogProps> = (props) => {
+    const { logs = '', extraClasses = '' } = props;
 
-export default function BuildLog({ logs = '', classList = [] }: BuildLogProps) {
+    const cnBuildLog = cn('build-log');
+
     return (
-        <pre className={['build-log', ...classList].join(' ')}>
+        <pre className={classnames(cnBuildLog(), extraClasses)}>
             <Ansi useClasses>{logs}</Ansi>
         </pre>
     );
-}
+};

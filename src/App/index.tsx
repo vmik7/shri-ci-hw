@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import { routes } from '../router';
 
-import Footer from '../components/Footer';
+import { Footer } from '../components/Footer';
 
 import './style.scss';
 

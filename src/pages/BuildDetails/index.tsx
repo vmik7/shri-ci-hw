@@ -1,56 +1,41 @@
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-
+import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
+import { cn } from '../../common';
+import { classnames } from '@bem-react/classnames';
 
 import { getBuildById, runRebuild } from '../../store/buildSlice';
 import { getSettingsData, fetchSettings } from '../../store/settingsSlice';
 
-import Header from '../../components/Header';
-import BuildItem from '../../components/BuildItem';
-import BuildLog from '../../components/BuildLog';
+import { Header } from '../../components/Header';
+import { BuildItem } from '../../components/BuildItem';
+import { BuildLog } from '../../components/BuildLog';
+
+import { IBuildDetailsProps } from './types';
 
 import './style.scss';
 
-import { BuildItemProps } from '../../components/BuildItem';
+export const BuildDetails: FC<IBuildDetailsProps> = (props) => {
+    const { contentClass, loadData } = props;
 
-interface BuildData extends BuildItemProps {
-    id: string;
-    configurationId: string;
-}
-interface BuildDetailsData {
-    data: BuildData;
-    logs: string;
-}
+    const { id: buildId } = useParams<{ id: string }>();
 
-interface RouteParams {
-    id: string;
-}
-
-export interface BuildDetailsProps {
-    contentClass?: Array<string>;
-    loadData(id: string): any;
-}
-
-export default function BuildDetails({
-    contentClass = [],
-    loadData,
-}: BuildDetailsProps) {
-    const { id: buildId } = useParams<RouteParams>();
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(loadData(buildId));
     }, [buildId, dispatch]);
+
     useEffect(() => {
         dispatch(fetchSettings());
     }, [dispatch]);
 
-    const build: BuildDetailsData = useSelector(getBuildById(buildId));
+    const build = useSelector(getBuildById(buildId));
     const settings = useSelector(getSettingsData());
 
-    let history = useHistory();
+    const history = useHistory();
+
+    const cnBuildDetails = cn('build-details');
 
     return (
         <>
@@ -86,14 +71,19 @@ export default function BuildDetails({
                 ]}
             />
             <div
-                className={['build-details', ...contentClass].join(' ')}
+                className={classnames(cnBuildDetails(), contentClass)}
                 data-testid="build-details"
             >
                 {build && (
-                    <div className="container build-details__container">
+                    <div
+                        className={classnames(
+                            cnBuildDetails('container'),
+                            'container',
+                        )}
+                    >
                         <BuildItem {...build.data} isDetailed={true} />
                         <BuildLog
-                            classList={['build-details__logs']}
+                            extraClasses={cnBuildDetails('logs')}
                             logs={build.logs}
                         />
                     </div>
@@ -101,4 +91,4 @@ export default function BuildDetails({
             </div>
         </>
     );
-}
+};

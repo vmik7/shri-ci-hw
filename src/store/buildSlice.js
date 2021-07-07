@@ -8,6 +8,7 @@ export const fetchBuildById = createAsyncThunk(
         return { data, logs };
     },
 );
+export const runFetchBuildById = (id) => fetchBuildById(id);
 
 export const fetchRebuild = createAsyncThunk(
     'buildById/rebuild',
