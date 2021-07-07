@@ -1,63 +1,34 @@
-import React from 'react';
+import { FC } from 'react';
+import { cn } from '../../common';
+import { classnames } from '@bem-react/classnames';
+
+import { ITextFieldProps } from './types';
 
 import './style.scss';
 
-export interface TextFieldProps {
-    placeholder?: string;
-    value?: string;
-    isLabeled?: boolean;
-    labelText?: string;
-    isRequired?: boolean;
-    isInline?: boolean;
-    name?: string;
-    classList?: Array<string>;
-    onChange(value: string): void;
-}
+export const TextField: FC<ITextFieldProps> = (props) => {
+    const {
+        isLabeled = false,
+        labelText = '',
+        isInline = false,
+        extraClasses = '',
+        onChange,
+        ...inputAttributes
+    } = props;
 
-export default function TextField({
-    placeholder = '',
-    value = '',
-    isLabeled = false,
-    labelText = '',
-    isRequired = false,
-    isInline = false,
-    name = '',
-    classList = [],
-    onChange,
-}: TextFieldProps) {
+    const cnTextField = cn('text-field');
     const WrapperTag = isInline ? 'span' : 'div';
-
-    let inputOptions: any = {};
-
-    if (name) {
-        inputOptions.name = name;
-    }
-    if (placeholder) {
-        inputOptions.placeholder = placeholder;
-    }
-    if (isRequired) {
-        inputOptions.required = true;
-    }
-
-    let allClasses = ['text-field', ...classList];
-    if (isInline) {
-        allClasses.push('text-field_inline');
-    }
-    if (isRequired) {
-        allClasses.push('text-field_required');
-    }
 
     const input = (
         <>
             <input
-                className="text-field__input"
-                {...inputOptions}
-                value={value}
+                className={cnTextField('input')}
+                {...inputAttributes}
                 onChange={(e) => onChange(e.target.value)}
             />
-            {!isInline && value && (
+            {!isInline && inputAttributes.value && (
                 <button
-                    className="text-field__clear"
+                    className={cnTextField('clear')}
                     onClick={() => onChange('')}
                 >
                     {/* prettier-ignore */}
@@ -67,14 +38,24 @@ export default function TextField({
         </>
     );
 
-    return isLabeled ? (
-        <WrapperTag className={allClasses.join(' ')}>
-            <label className="text-field__label-wrap">
-                <span className="text-field__label">{labelText}</span>
-                {input}
-            </label>
-        </WrapperTag>
-    ) : (
-        <WrapperTag className={allClasses.join(' ')}>{input}</WrapperTag>
+    const inputLabeled = (
+        <label className={cnTextField('label-wrap')}>
+            <span className={cnTextField('label')}>{labelText}</span>
+            {input}
+        </label>
     );
-}
+
+    return (
+        <WrapperTag
+            className={classnames(
+                cnTextField({
+                    inline: isInline,
+                    required: inputAttributes.required,
+                }),
+                extraClasses,
+            )}
+        >
+            {isLabeled ? inputLabeled : input}
+        </WrapperTag>
+    );
+};

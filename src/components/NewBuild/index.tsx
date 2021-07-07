@@ -8,7 +8,7 @@ import { getNewBuildData, setHash, pushBuild } from '../../store/newBuildSlice';
 import { closeModal } from '../../store/buildsSlice';
 
 import { Modal } from '../Modal';
-import TextField from '../TextField';
+import { TextField } from '../TextField';
 import { Button } from '../Button';
 
 import { INewBuildProps, INewBuildState } from './types';
@@ -69,8 +69,8 @@ export const NewBuild: FC<INewBuildProps> = (props) => {
                 >
                     <TextField
                         placeholder="Commit hash"
-                        isRequired={true}
-                        classList={[cnNewBuild('input')]}
+                        required
+                        extraClasses={cnNewBuild('input')}
                         name="hash"
                         onChange={(value) => dispatch(setHash(value))}
                         value={hash}

@@ -16,7 +16,7 @@ import {
 import './style.scss';
 
 import { Header } from '../../components/Header';
-import TextField from '../../components/TextField';
+import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
 
 export const Settings: FC<{
@@ -74,20 +74,20 @@ export const Settings: FC<{
                         <TextField
                             value={data ? data.repoName : ''}
                             placeholder="user-name/repo-name"
-                            isLabeled={true}
+                            isLabeled
                             labelText="GitHub repository"
-                            isRequired={true}
-                            classList={['settings__input']}
+                            required
+                            extraClasses={'settings__input'}
                             name="repo"
                             onChange={(value) => dispatch(setRepoName(value))}
                         />
                         <TextField
                             value={data ? data.buildCommand : ''}
                             placeholder="example: npm run build"
-                            isLabeled={true}
+                            isLabeled
                             labelText="Build command"
-                            isRequired={true}
-                            classList={['settings__input']}
+                            required
+                            extraClasses={'settings__input'}
                             name="build"
                             onChange={(value) =>
                                 dispatch(setBuildCommand(value))
@@ -96,9 +96,9 @@ export const Settings: FC<{
                         <TextField
                             value={data ? data.mainBranch : ''}
                             placeholder="main"
-                            isLabeled={true}
+                            isLabeled
                             labelText="Main branch"
-                            classList={['settings__input']}
+                            extraClasses={'settings__input'}
                             name="branch"
                             onChange={(value) => dispatch(setMainBranch(value))}
                         />
@@ -111,7 +111,6 @@ export const Settings: FC<{
                                 ).toString()}
                                 placeholder="10"
                                 isInline={true}
-                                classList={[]}
                                 name="period"
                                 onChange={(value: string) => {
                                     value = value.trim();
