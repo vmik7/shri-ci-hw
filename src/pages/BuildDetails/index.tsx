@@ -8,14 +8,14 @@ import { getBuildById, runRebuild } from '../../store/buildSlice';
 import { getSettingsData, fetchSettings } from '../../store/settingsSlice';
 
 import Header from '../../components/Header';
-import BuildItem from '../../components/BuildItem';
+import { BuildItem } from '../../components/BuildItem';
 import BuildLog from '../../components/BuildLog';
 
 import './style.scss';
 
-import { BuildItemProps } from '../../components/BuildItem';
+import { IBuildItemProps } from '../../components/BuildItem/types';
 
-interface BuildData extends BuildItemProps {
+interface BuildData extends IBuildItemProps {
     id: string;
     configurationId: string;
 }

@@ -5,16 +5,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getBuilds, openModal, moreBuilds } from '../../store/buildsSlice';
 import { getSettingsData, fetchSettings } from '../../store/settingsSlice';
 
-import BuildItem from '../../components/BuildItem';
+import { BuildItem } from '../../components/BuildItem';
 import Header from '../../components/Header';
 import { Button } from '../../components/Button';
 import NewBuild from '../../components/NewBuild';
 
 import './style.scss';
 
-import { BuildItemProps } from '../../components/BuildItem';
+import { IBuildItemProps } from '../../components/BuildItem/types';
 
-interface BuildData extends BuildItemProps {
+interface BuildData extends IBuildItemProps {
     id: string;
     configurationId: string;
 }
@@ -88,7 +88,7 @@ export default function BuildList({
                         <BuildItem
                             {...build}
                             key={build.buildNumber}
-                            classList={['build-list__item']}
+                            extraClasses="build-list__item"
                             onClick={handleItemClick.bind(null, build.id)}
                         />
                     ))}
