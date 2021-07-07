@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
@@ -15,7 +15,7 @@ import {
 
 import './style.scss';
 
-import Header from '../../components/Header';
+import { Header } from '../../components/Header';
 import TextField from '../../components/TextField';
 import { Button } from '../../components/Button';
 

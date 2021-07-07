@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router';
 
 import { Button } from '../../components/Button';
-import Header from '../../components/Header';
+import { Header } from '../../components/Header';
 
 import './style.scss';
 import iconSettings from './icons/settings.svg';
