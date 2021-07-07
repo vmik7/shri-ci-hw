@@ -1,6 +1,12 @@
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import { cn } from '../../common';
+import { classnames } from '@bem-react/classnames';
+
+import { Header } from '../../components/Header';
+import { TextField } from '../../components/TextField';
+import { Button } from '../../components/Button';
 
 import {
     getSettingsData,
@@ -13,19 +19,15 @@ import {
     setPeriod,
 } from '../../store/settingsSlice';
 
+import { ISettingsProps } from './types';
+
 import './style.scss';
 
-import { Header } from '../../components/Header';
-import { TextField } from '../../components/TextField';
-import { Button } from '../../components/Button';
-
-export const Settings: FC<{
-    contentClass?: Array<string>;
-    loadData(): any;
-}> = (props) => {
-    const { contentClass = [], loadData } = props;
+export const Settings: FC<ISettingsProps> = (props) => {
+    const { contentClass, loadData } = props;
 
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch(loadData());
     }, [dispatch]);
@@ -35,6 +37,8 @@ export const Settings: FC<{
     const saveStatus = useSelector(getSavingStatus());
 
     const history = useHistory();
+
+    const cnSettings = cn('settings');
 
     function validate() {
         if (!data.repoName) {
@@ -59,13 +63,15 @@ export const Settings: FC<{
         <>
             <Header title="School CI server" isFaded={true} />
             <div
-                className={['settings', ...contentClass].join(' ')}
+                className={classnames(cnSettings(), contentClass)}
                 data-testid="settings"
             >
-                <div className="container settings__container">
-                    <div className="settings__header">
-                        <h2 className="settings__title">Settings</h2>
-                        <p className="settings__sub-title">
+                <div
+                    className={classnames(cnSettings('container'), 'container')}
+                >
+                    <div className={cnSettings('header')}>
+                        <h2 className={cnSettings('title')}>Settings</h2>
+                        <p className={cnSettings('sub-title')}>
                             Configure repository connection and synchronization
                             settings.
                         </p>
@@ -77,7 +83,7 @@ export const Settings: FC<{
                             isLabeled
                             labelText="GitHub repository"
                             required
-                            extraClasses={'settings__input'}
+                            extraClasses={cnSettings('input')}
                             name="repo"
                             onChange={(value) => dispatch(setRepoName(value))}
                         />
@@ -87,7 +93,7 @@ export const Settings: FC<{
                             isLabeled
                             labelText="Build command"
                             required
-                            extraClasses={'settings__input'}
+                            extraClasses={cnSettings('input')}
                             name="build"
                             onChange={(value) =>
                                 dispatch(setBuildCommand(value))
@@ -98,11 +104,11 @@ export const Settings: FC<{
                             placeholder="main"
                             isLabeled
                             labelText="Main branch"
-                            extraClasses={'settings__input'}
+                            extraClasses={cnSettings('input')}
                             name="branch"
                             onChange={(value) => dispatch(setMainBranch(value))}
                         />
-                        <div className="settings__input_inline">
+                        <div className={cnSettings('input', { inline: true })}>
                             Synchronize every
                             <TextField
                                 value={(data
@@ -121,11 +127,13 @@ export const Settings: FC<{
                             />
                             minutes
                         </div>
-                        <div className="settings__controls">
+                        <div className={cnSettings('controls')}>
                             <Button
                                 text="Save"
                                 isPrimary={true}
-                                extraClasses="settings__button settings__button_action_save"
+                                extraClasses={cnSettings('button', {
+                                    action: 'save',
+                                })}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     const errorMessage = validate();
@@ -139,7 +147,9 @@ export const Settings: FC<{
                             />
                             <Button
                                 text="Cancel"
-                                extraClasses="settings__button settings__button_action_cancel"
+                                extraClasses={cnSettings('button', {
+                                    action: 'cancel',
+                                })}
                                 onClick={() => {
                                     history.push('/');
                                 }}
