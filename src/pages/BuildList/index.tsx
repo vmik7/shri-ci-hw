@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { cn } from '../../common';
+import { classnames } from '@bem-react/classnames';
 
 import { getBuilds, openModal, moreBuilds } from '../../store/buildsSlice';
 import { getSettingsData, fetchSettings } from '../../store/settingsSlice';
@@ -10,37 +12,22 @@ import { Header } from '../../components/Header';
 import { Button } from '../../components/Button';
 import { NewBuild } from '../../components/NewBuild';
 
+import { IBuildListProps, IBuildListState } from './types';
+
 import './style.scss';
 
-import { IBuildItemProps } from '../../components/BuildItem/types';
+export const BuildList: FC<IBuildListProps> = (props) => {
+    const { contentClass, loadData } = props;
 
-interface BuildData extends IBuildItemProps {
-    id: string;
-    configurationId: string;
-}
-interface BuildListState {
-    data: BuildData[];
-    isLoading: boolean;
-    isAllLoaded: boolean;
-    isModalOpen: boolean;
-}
-export interface BuildListProps {
-    contentClass?: Array<string>;
-    loadData(): any;
-}
-
-export default function BuildList({
-    contentClass = [],
-    loadData,
-}: BuildListProps) {
     const dispatch = useDispatch();
 
-    const builds: BuildListState = useSelector(getBuilds);
+    const builds: IBuildListState = useSelector(getBuilds);
     const settings = useSelector(getSettingsData());
 
     useEffect(() => {
         dispatch(loadData());
     }, [loadData, dispatch]);
+
     useEffect(() => {
         dispatch(fetchSettings());
     }, [dispatch]);
@@ -50,6 +37,8 @@ export default function BuildList({
     function handleItemClick(id: string) {
         history.push(`/build/${id}`);
     }
+
+    const cnBuildList = cn('build-list');
 
     return (
         <>
@@ -80,28 +69,34 @@ export default function BuildList({
                 ]}
             />
             <div
-                className={['build-list', ...contentClass].join(' ')}
+                className={classnames(cnBuildList(), contentClass)}
                 data-testid="build-list"
             >
-                <div className="container build-list__container">
+                <div
+                    className={classnames(
+                        cnBuildList('container'),
+                        'container',
+                    )}
+                >
                     {builds.data.map((build) => (
                         <BuildItem
                             {...build}
                             key={build.buildNumber}
-                            extraClasses="build-list__item"
+                            extraClasses={cnBuildList('item')}
                             onClick={handleItemClick.bind(null, build.id)}
                         />
                     ))}
-                    {builds.isLoading && <div>Loading...</div>}
-                    {!builds.isLoading && !builds.isAllLoaded && (
+                    {builds.isLoading ? (
+                        <div>Loading...</div>
+                    ) : !builds.isAllLoaded ? (
                         <Button
                             text="Show more"
                             onClick={() => dispatch(moreBuilds())}
                         />
-                    )}
+                    ) : null}
                 </div>
                 {builds.isModalOpen && <NewBuild />}
             </div>
         </>
     );
-}
+};
