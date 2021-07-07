@@ -3,7 +3,7 @@ import { classnames } from '@bem-react/classnames';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
-import { cn } from '../../styles';
+import { cn } from '../../common';
 import { IBuildItemProps } from './types';
 
 import './style.scss';

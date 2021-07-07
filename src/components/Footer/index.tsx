@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { cn } from '../../styles';
+import { cn } from '../../common';
 import { classnames } from '@bem-react/classnames';
 
 import { IFooterProps } from './types';

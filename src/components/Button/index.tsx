@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { classnames } from '@bem-react/classnames';
 
-import { cn } from '../../styles';
+import { cn } from '../../common';
 import { IButtonProps } from './types';
 
 import './style.scss';

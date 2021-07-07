@@ -1,3 +1,3 @@
-export interface IFooterProps {
-    extraClasses?: string;
-}
+import { IComponentProps } from '../../common';
+
+export interface IFooterProps extends IComponentProps {}
