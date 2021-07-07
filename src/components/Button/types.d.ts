@@ -10,6 +10,6 @@ export interface IButtonProps
     isPrimary?: boolean;
     isSmall?: boolean;
     isDisabled?: boolean;
-    classList?: Array<string>;
+    extraClasses?: string;
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }

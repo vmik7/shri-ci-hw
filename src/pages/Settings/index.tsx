@@ -126,10 +126,7 @@ export const Settings: FC<{
                             <Button
                                 text="Save"
                                 isPrimary={true}
-                                classList={[
-                                    'settings__button',
-                                    'settings__button_action_save',
-                                ]}
+                                extraClasses="settings__button settings__button_action_save"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     const errorMessage = validate();
@@ -143,10 +140,7 @@ export const Settings: FC<{
                             />
                             <Button
                                 text="Cancel"
-                                classList={[
-                                    'settings__button',
-                                    'settings__button_action_cancel',
-                                ]}
+                                extraClasses="settings__button settings__button_action_cancel"
                                 onClick={() => {
                                     history.push('/');
                                 }}

@@ -30,7 +30,7 @@ export default function Header({
                     <Button
                         {...buttonProps}
                         key={index}
-                        classList={['header__control']}
+                        extraClasses="header__control"
                     />
                 ))}
             </div>

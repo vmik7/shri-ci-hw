@@ -14,7 +14,7 @@ export const Button: FC<IButtonProps> = (props) => {
         iconOnly = false,
         isPrimary = false,
         isSmall = false,
-        classList = [],
+        extraClasses = '',
         onClick,
         ...buttonProps
     } = props;
@@ -30,7 +30,7 @@ export const Button: FC<IButtonProps> = (props) => {
                     'has-icon': hasIcon,
                     'icon-only': iconOnly,
                 }),
-                ...classList,
+                extraClasses,
             )}
             onClick={onClick}
             {...buttonProps}
