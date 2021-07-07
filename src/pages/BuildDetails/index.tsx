@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import { getSettingsData, fetchSettings } from '../../store/settingsSlice';
 
 import Header from '../../components/Header';
 import { BuildItem } from '../../components/BuildItem';
-import BuildLog from '../../components/BuildLog';
+import { BuildLog } from '../../components/BuildLog';
 
 import './style.scss';
 
@@ -93,7 +93,7 @@ export default function BuildDetails({
                     <div className="container build-details__container">
                         <BuildItem {...build.data} isDetailed={true} />
                         <BuildLog
-                            classList={['build-details__logs']}
+                            extraClasses="build-details__logs"
                             logs={build.logs}
                         />
                     </div>
