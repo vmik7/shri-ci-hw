@@ -17,7 +17,7 @@ import './style.scss';
 
 import Header from '../../components/Header';
 import TextField from '../../components/TextField';
-import Button from '../../components/Button';
+import { Button } from '../../components/Button';
 
 export const Settings: FC<{
     contentClass?: Array<string>;

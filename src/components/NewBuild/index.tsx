@@ -7,7 +7,7 @@ import { closeModal } from '../../store/buildsSlice';
 
 import Modal from '../Modal';
 import TextField from '../TextField';
-import Button from '../Button';
+import { Button } from '../Button';
 
 import './style.scss';
 interface NewBuildState {

@@ -7,7 +7,7 @@ import { getSettingsData, fetchSettings } from '../../store/settingsSlice';
 
 import BuildItem from '../../components/BuildItem';
 import Header from '../../components/Header';
-import Button from '../../components/Button';
+import { Button } from '../../components/Button';
 import NewBuild from '../../components/NewBuild';
 
 import './style.scss';

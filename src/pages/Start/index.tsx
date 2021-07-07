@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router';
 
-import Button from '../../components/Button';
+import { Button } from '../../components/Button';
 import Header from '../../components/Header';
 
 import './style.scss';
@@ -14,7 +14,7 @@ export interface StartProps {
 export default function Start({ contentClass = [] }: StartProps) {
     let history = useHistory();
 
-    let openSettings = () => {
+    const openSettings = () => {
         history.push('/settings');
     };
 

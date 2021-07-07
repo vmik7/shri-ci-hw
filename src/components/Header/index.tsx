@@ -2,14 +2,14 @@ import React from 'react';
 
 import './style.scss';
 
-import Button from '../Button';
+import { Button } from '../Button';
 
-import { ButtonProps } from '../Button';
+import { IButtonProps } from '../Button/types';
 
 export interface HeaderProps {
     title: string;
     isFaded?: boolean;
-    buttons?: Array<ButtonProps>;
+    buttons?: Array<IButtonProps>;
 }
 
 export default function Header({
