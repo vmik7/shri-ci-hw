@@ -6,7 +6,7 @@ import { Settings } from '../pages/Settings';
 import { Start } from '../pages/Start';
 
 import { fetchBuilds } from '../store/buildsSlice';
-import { runFetchBuildById } from '../store/buildSlice';
+import { fetchBuildById } from '../store/buildDetailsSlice';
 import { fetchSettings } from '../store/settingsSlice';
 
 export const routes: IRoute[] = [
@@ -31,7 +31,7 @@ export const routes: IRoute[] = [
         contentClass: 'app__content',
         loadData: (dispatch, id) => {
             dispatch(fetchSettings());
-            dispatch(runFetchBuildById(id));
+            dispatch(fetchBuildById(id));
         },
     },
     {

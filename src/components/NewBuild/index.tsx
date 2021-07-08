@@ -1,17 +1,27 @@
 import { FC, useCallback } from 'react';
 import { useHistory } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
-import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
 
-import { getNewBuildData, setHash, pushBuild } from '../../store/newBuildSlice';
+import { cn } from '../../common/';
+
+import {
+    useAppSelector as useSelector,
+    useAppDispatch as useDispatch,
+} from '../../store/hooks';
+import {
+    getSubmittingStatus,
+    setHash,
+    getHash,
+    postBuild,
+    getNewBuildData,
+} from '../../store/newBuildSlice';
 import { closeModal } from '../../store/buildsSlice';
 
 import { Modal } from '../Modal';
 import { TextField } from '../TextField';
 import { Button } from '../Button';
 
-import { INewBuildProps, INewBuildState } from './types';
+import { INewBuildProps } from './types';
 
 import './style.scss';
 
@@ -19,13 +29,12 @@ export const NewBuild: FC<INewBuildProps> = (props) => {
     const { extraClasses } = props;
 
     const dispatch = useDispatch();
-    const {
-        hash,
-        isSubmiting,
-        isSubmitError,
-        submitError,
-        newBuildId,
-    }: INewBuildState = useSelector(getNewBuildData);
+
+    const hash = useSelector(getHash());
+    const { isSubmitting, isSubmitted, submitError } = useSelector(
+        getSubmittingStatus(),
+    );
+    const newBuildData = useSelector(getNewBuildData());
 
     let history = useHistory();
 
@@ -38,12 +47,12 @@ export const NewBuild: FC<INewBuildProps> = (props) => {
         return '';
     }
 
-    if (isSubmitError) {
+    if (submitError) {
         alert(`Ошибка!\n\n${submitError}`);
     }
 
-    if (newBuildId) {
-        history.push(`/build/${newBuildId}`);
+    if (newBuildData) {
+        history.push(`/build/${newBuildData.id}`);
     }
 
     const onCancelHandler = useCallback(() => {
@@ -58,7 +67,7 @@ export const NewBuild: FC<INewBuildProps> = (props) => {
             if (errorMessage) {
                 alert(errorMessage);
             } else {
-                dispatch(pushBuild());
+                dispatch(postBuild());
             }
         },
         [validate, dispatch],
@@ -90,12 +99,12 @@ export const NewBuild: FC<INewBuildProps> = (props) => {
                             isPrimary={true}
                             text="Run build"
                             type="submit"
-                            disabled={isSubmiting}
+                            disabled={isSubmitting}
                         />
                         <Button
                             text="Cancel"
                             onClick={onCancelHandler}
-                            disabled={isSubmiting}
+                            disabled={isSubmitting}
                         />
                     </div>
                 </form>

@@ -1,15 +1,18 @@
-import React from 'react';
+import { FC } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
+import { cn } from '../common';
 import { routes } from '../router';
 
 import { Footer } from '../components/Footer';
 
 import './style.scss';
 
-export default function App() {
+export const App: FC = () => {
+    const cnApp = cn('app');
+
     return (
-        <div className="app">
+        <div className={cnApp()}>
             <Switch>
                 {routes.map((route) => (
                     <Route exact path={route.path} key={route.path}>
@@ -20,9 +23,7 @@ export default function App() {
                     </Route>
                 ))}
             </Switch>
-            <div className="app__footer">
-                <Footer />
-            </div>
+            <Footer extraClasses={cnApp('footer')} />
         </div>
     );
-}
+};

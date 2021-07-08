@@ -1,23 +1,26 @@
 import { FC, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
 
-import { Header } from '../../components/Header';
-import { TextField } from '../../components/TextField';
-import { Button } from '../../components/Button';
+import { cn } from '../../common/';
 
+import {
+    useAppSelector as useSelector,
+    useAppDispatch as useDispatch,
+} from '../../store/hooks';
 import {
     getSettingsData,
     getSavingStatus,
-    getSavingErrorData,
     setSettings,
     setRepoName,
     setBuildCommand,
     setMainBranch,
     setPeriod,
 } from '../../store/settingsSlice';
+
+import { Header } from '../../components/Header';
+import { TextField } from '../../components/TextField';
+import { Button } from '../../components/Button';
 
 import { ISettingsProps } from './types';
 
@@ -33,8 +36,7 @@ export const Settings: FC<ISettingsProps> = (props) => {
     }, [dispatch]);
 
     const data = useSelector(getSettingsData());
-    const saveError = useSelector(getSavingErrorData());
-    const saveStatus = useSelector(getSavingStatus());
+    const { isSaving, saveError } = useSelector(getSavingStatus());
 
     const history = useHistory();
 
@@ -163,7 +165,7 @@ export const Settings: FC<ISettingsProps> = (props) => {
                                     action: 'save',
                                 })}
                                 onClick={onSaveHandler}
-                                disabled={saveStatus.isSaving}
+                                disabled={isSaving}
                             />
                             <Button
                                 text="Cancel"
@@ -171,7 +173,7 @@ export const Settings: FC<ISettingsProps> = (props) => {
                                     action: 'cancel',
                                 })}
                                 onClick={onCancelHandler}
-                                disabled={saveStatus.isSaving}
+                                disabled={isSaving}
                             />
                         </div>
                     </form>

@@ -1,18 +1,22 @@
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
 
+import { cn } from '../../common/';
+
+import {
+    useAppSelector as useSelector,
+    useAppDispatch as useDispatch,
+} from '../../store/hooks';
 import { getBuilds, openModal, moreBuilds } from '../../store/buildsSlice';
-import { getSettingsData, fetchSettings } from '../../store/settingsSlice';
+import { getRepoName } from '../../store/settingsSlice';
 
 import { BuildItem } from '../../components/BuildItem';
 import { Header } from '../../components/Header';
 import { Button } from '../../components/Button';
 import { NewBuild } from '../../components/NewBuild';
 
-import { IBuildListProps, IBuildListState } from './types';
+import { IBuildListProps } from './types';
 
 import './style.scss';
 
@@ -21,12 +25,12 @@ export const BuildList: FC<IBuildListProps> = (props) => {
 
     const dispatch = useDispatch();
 
-    const builds: IBuildListState = useSelector(getBuilds);
-    const settings = useSelector(getSettingsData());
-
     useEffect(() => {
         loadData(dispatch);
     }, [dispatch]);
+
+    const builds = useSelector(getBuilds());
+    const repoName = useSelector(getRepoName());
 
     const history = useHistory();
 
@@ -56,7 +60,7 @@ export const BuildList: FC<IBuildListProps> = (props) => {
         () =>
             builds.data.map((build) => (
                 <BuildItem
-                    {...build}
+                    data={build}
                     key={build.buildNumber}
                     extraClasses={cnBuildList('item')}
                     onClick={onItemClickHandler.bind(null, build.id)}
@@ -83,7 +87,7 @@ export const BuildList: FC<IBuildListProps> = (props) => {
     return (
         <>
             <Header
-                title={settings.repoName}
+                title={repoName}
                 buttons={[
                     {
                         text: 'Run Build',

@@ -1,12 +1,15 @@
-const { PORT, testModeQuery } = require('../server/config');
+import { IApi, BuildListParams, ConfigurationPost, BuildPost } from './types';
 
+import { PORT, testModeQuery } from '../server/config';
 const API = `http://localhost:${PORT}/api`;
 
-export class Api {
+export class Api implements IApi {
     testMode: boolean;
+
     constructor(testMode = false) {
         this.testMode = testMode;
     }
+
     async get(url: string, params?: any) {
         let searchParams = new URLSearchParams(params);
 
@@ -22,6 +25,7 @@ export class Api {
         const response = await fetch(fullUrl);
         return await response.json();
     }
+
     async post(url: string, data: object = {}) {
         let fullUrl = API + url;
         const response = await fetch(fullUrl, {
@@ -33,34 +37,28 @@ export class Api {
         });
         return await response.json();
     }
-    buildList(params: buildListParams) {
+
+    getBuildList(params: BuildListParams) {
         return this.get('/builds', params);
     }
-    buildById(id: string) {
+
+    getBuildById(id: string) {
         return this.get(`/builds/${id}`);
     }
-    buildLogsById(id: string) {
+
+    getBuildLogs(id: string) {
         return this.get(`/builds/${id}/logs`);
     }
+
     getSettings() {
         return this.get('/settings');
     }
-    setSettings(data: setSettingsData) {
+
+    postSettings(data: ConfigurationPost) {
         return this.post('/settings', data);
     }
-    pushBuild(commitHash: string) {
-        return this.post(`/builds/${commitHash}`);
+
+    postBuild(data: BuildPost) {
+        return this.post(`/builds/${data.commitHash}`);
     }
-}
-
-interface buildListParams {
-    limit?: number;
-    offset?: number;
-}
-
-interface setSettingsData {
-    repoName: string;
-    buildCommand: string;
-    mainBranch: string;
-    period: number | '';
 }
