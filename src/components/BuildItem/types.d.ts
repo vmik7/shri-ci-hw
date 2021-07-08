@@ -1,21 +1,7 @@
 import { IComponentProps } from '../../common/types';
-
-export type BuildStatus =
-    | 'Success'
-    | 'Waiting'
-    | 'InProgress'
-    | 'Fail'
-    | 'Canceled';
-
+import { Build } from '../../api/types';
 export interface IBuildItemProps extends IComponentProps {
-    buildNumber: number;
-    commitMessage: string;
-    commitHash: string;
-    branchName: string;
-    authorName: string;
-    status: BuildStatus;
-    start?: string;
-    duration?: number;
+    data: Build;
     isDetailed?: boolean;
     onClick?: (e: React.MouseEvent<HTMLElement>) => void;
 }

@@ -12,6 +12,7 @@ import iconPending from './icons/pending.svg';
 import iconFail from './icons/fail.svg';
 
 export const BuildItem: FC<IBuildItemProps> = (props) => {
+    const { data, extraClasses, isDetailed, onClick } = props;
     const {
         buildNumber,
         commitMessage,
@@ -21,10 +22,7 @@ export const BuildItem: FC<IBuildItemProps> = (props) => {
         status,
         start,
         duration,
-        extraClasses,
-        isDetailed,
-        onClick,
-    } = props;
+    } = data;
 
     const cnBuildItem = cn('build-item');
 

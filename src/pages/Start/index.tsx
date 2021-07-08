@@ -1,7 +1,8 @@
 import { FC, useCallback } from 'react';
 import { useHistory } from 'react-router';
-import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
+
+import { cn } from '../../common/';
 
 import { Button } from '../../components/Button';
 import { Header } from '../../components/Header';

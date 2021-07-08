@@ -1,11 +1,15 @@
 import { FC, useCallback, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
-import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
 
-import { getBuildById, runRebuild } from '../../store/buildSlice';
-import { getSettingsData } from '../../store/settingsSlice';
+import { cn } from '../../common/';
+
+import {
+    useAppSelector as useSelector,
+    useAppDispatch as useDispatch,
+} from '../../store/hooks';
+import { getBuildById, fetchRebuild } from '../../store/buildDetailsSlice';
+import { getRepoName } from '../../store/settingsSlice';
 
 import { Header } from '../../components/Header';
 import { BuildItem } from '../../components/BuildItem';
@@ -17,7 +21,6 @@ import './style.scss';
 
 export const BuildDetails: FC<IBuildDetailsProps> = (props) => {
     const { contentClass, loadData } = props;
-
     const { id: buildId } = useParams<{ id: string }>();
 
     const dispatch = useDispatch();
@@ -26,8 +29,8 @@ export const BuildDetails: FC<IBuildDetailsProps> = (props) => {
         loadData(dispatch, buildId);
     }, [dispatch, buildId]);
 
-    const build = useSelector(getBuildById(buildId));
-    const settings = useSelector(getSettingsData());
+    const { data, logs } = useSelector(getBuildById(buildId));
+    const repoName = useSelector(getRepoName());
 
     const history = useHistory();
 
@@ -35,12 +38,12 @@ export const BuildDetails: FC<IBuildDetailsProps> = (props) => {
 
     const onRebuildHandler = useCallback(() => {
         dispatch(
-            runRebuild({
-                hash: build.data.commitHash,
+            fetchRebuild({
+                hash: data.commitHash,
                 history,
             }),
         );
-    }, [dispatch, build.data.commitHash, history]);
+    }, [dispatch, data.commitHash, history]);
 
     const onSettingsHandler = useCallback(() => {
         history.push('/settings');
@@ -48,27 +51,27 @@ export const BuildDetails: FC<IBuildDetailsProps> = (props) => {
 
     const buildMemo = useMemo(
         () =>
-            build ? (
+            data ? (
                 <div
                     className={classnames(
                         cnBuildDetails('container'),
                         'container',
                     )}
                 >
-                    <BuildItem {...build.data} isDetailed={true} />
+                    <BuildItem data={data} isDetailed={true} />
                     <BuildLog
                         extraClasses={cnBuildDetails('logs')}
-                        logs={build.logs}
+                        logs={logs}
                     />
                 </div>
             ) : null,
-        [build, cnBuildDetails, classnames],
+        [data, logs, cnBuildDetails, classnames],
     );
 
     return (
         <>
             <Header
-                title={settings.repoName}
+                title={repoName}
                 buttons={[
                     {
                         text: 'Rebuild',
