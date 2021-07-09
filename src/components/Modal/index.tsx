@@ -14,11 +14,11 @@ export const Modal = memo<IModalProps>((props) => {
 
     const wrapperClicHandler = useCallback(
         (event) => {
-            if (event.target === wrapperEl.current) {
+            if (event.target === wrapperEl.current && onWrapperClick) {
                 onWrapperClick(event);
             }
         },
-        [wrapperEl],
+        [wrapperEl, onWrapperClick],
     );
 
     const titleMemo = useMemo(

@@ -5,5 +5,5 @@ export interface IModalProps extends IComponentProps {
     title?: string;
     subtitle?: string;
     content?: React.ReactNode;
-    onWrapperClick: (event?: React.MouseEvent) => void;
+    onWrapperClick?: (event?: React.MouseEvent) => void;
 }
