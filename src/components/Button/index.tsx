@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { classnames } from '@bem-react/classnames';
 
 import { cn } from '../../common/';
@@ -6,7 +6,7 @@ import { IButtonProps } from './types';
 
 import './style.scss';
 
-export const Button: FC<IButtonProps> = (props) => {
+export const Button = memo<IButtonProps>((props) => {
     const {
         text,
         svg,
@@ -50,4 +50,4 @@ export const Button: FC<IButtonProps> = (props) => {
             {textMemo}
         </button>
     );
-};
+});

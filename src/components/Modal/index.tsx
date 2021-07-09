@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useRef } from 'react';
+import { memo, useCallback, useMemo, useRef } from 'react';
 import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
 
@@ -6,7 +6,7 @@ import { IModalProps } from './types';
 
 import './style.scss';
 
-export const Modal: FC<IModalProps> = (props) => {
+export const Modal = memo<IModalProps>((props) => {
     const { title, subtitle, content, extraClasses, onWrapperClick } = props;
 
     const cnModal = cn('modal');
@@ -48,4 +48,4 @@ export const Modal: FC<IModalProps> = (props) => {
             </div>
         </div>
     );
-};
+});

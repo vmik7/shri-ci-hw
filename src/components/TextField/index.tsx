@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
 
@@ -6,7 +6,7 @@ import { ITextFieldProps } from './types';
 
 import './style.scss';
 
-export const TextField: FC<ITextFieldProps> = (props) => {
+export const TextField = memo<ITextFieldProps>((props) => {
     const {
         isLabeled,
         labelText,
@@ -75,4 +75,4 @@ export const TextField: FC<ITextFieldProps> = (props) => {
             {inputMemo}
         </WrapperTag>
     );
-};
+});

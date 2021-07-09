@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import { classnames } from '@bem-react/classnames';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -11,7 +11,7 @@ import iconSuccess from './icons/success.svg';
 import iconPending from './icons/pending.svg';
 import iconFail from './icons/fail.svg';
 
-export const BuildItem: FC<IBuildItemProps> = (props) => {
+export const BuildItem = memo<IBuildItemProps>((props) => {
     const { data, extraClasses, isDetailed, onClick } = props;
     const {
         buildNumber,
@@ -109,4 +109,4 @@ export const BuildItem: FC<IBuildItemProps> = (props) => {
             </footer>
         </article>
     );
-};
+});
