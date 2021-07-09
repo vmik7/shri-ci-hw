@@ -1,5 +1,5 @@
-import { Dispatch } from '@reduxjs/toolkit';
 import { useHistory } from 'react-router-dom';
+import { AppDispatch as Dispatch } from '../store/types';
 
 export type History = ReturnType<typeof useHistory>;
 export interface IComponentProps {
