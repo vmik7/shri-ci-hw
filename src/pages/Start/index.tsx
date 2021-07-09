@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { useHistory } from 'react-router';
 import { classnames } from '@bem-react/classnames';
 
@@ -12,7 +12,7 @@ import { IStartProps } from './types';
 import './style.scss';
 import iconSettings from './icons/settings.svg';
 
-export const Start: FC<IStartProps> = (props) => {
+export const Start = memo<IStartProps>((props) => {
     const { contentClass } = props;
 
     const history = useHistory();
@@ -62,4 +62,4 @@ export const Start: FC<IStartProps> = (props) => {
             </div>
         </>
     );
-};
+});

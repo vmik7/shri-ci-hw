@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { useHistory } from 'react-router';
 import { classnames } from '@bem-react/classnames';
 
@@ -25,15 +25,13 @@ import { INewBuildProps } from './types';
 
 import './style.scss';
 
-export const NewBuild: FC<INewBuildProps> = (props) => {
+export const NewBuild = memo<INewBuildProps>((props) => {
     const { extraClasses } = props;
 
     const dispatch = useDispatch();
 
     const hash = useSelector(getHash());
-    const { isSubmitting, isSubmitted, submitError } = useSelector(
-        getSubmittingStatus(),
-    );
+    const { isSubmitting, submitError } = useSelector(getSubmittingStatus());
     const newBuildData = useSelector(getNewBuildData());
 
     let history = useHistory();
@@ -111,4 +109,4 @@ export const NewBuild: FC<INewBuildProps> = (props) => {
             }
         />
     );
-};
+});

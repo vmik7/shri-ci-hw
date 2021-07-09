@@ -1,4 +1,4 @@
-import { FC, useEffect, useCallback } from 'react';
+import { memo, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router';
 import { classnames } from '@bem-react/classnames';
 
@@ -26,7 +26,7 @@ import { ISettingsProps } from './types';
 
 import './style.scss';
 
-export const Settings: FC<ISettingsProps> = (props) => {
+export const Settings = memo<ISettingsProps>((props) => {
     const { contentClass, loadData } = props;
 
     const dispatch = useDispatch();
@@ -181,4 +181,4 @@ export const Settings: FC<ISettingsProps> = (props) => {
             </div>
         </>
     );
-};
+});

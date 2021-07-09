@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo } from 'react';
+import { memo, useCallback, useEffect, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { classnames } from '@bem-react/classnames';
 
@@ -19,7 +19,7 @@ import { IBuildDetailsProps } from './types';
 
 import './style.scss';
 
-export const BuildDetails: FC<IBuildDetailsProps> = (props) => {
+export const BuildDetails = memo<IBuildDetailsProps>((props) => {
     const { contentClass, loadData } = props;
     const { id: buildId } = useParams<{ id: string }>();
 
@@ -100,4 +100,4 @@ export const BuildDetails: FC<IBuildDetailsProps> = (props) => {
             </div>
         </>
     );
-};
+});

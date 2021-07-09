@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
 
@@ -8,7 +8,7 @@ import { IHeaderProps } from './types';
 
 import './style.scss';
 
-export const Header: FC<IHeaderProps> = (props) => {
+export const Header = memo<IHeaderProps>((props) => {
     const { title, isFaded, buttons = [], extraClasses } = props;
 
     const cnHeader = cn('header');
@@ -38,4 +38,4 @@ export const Header: FC<IHeaderProps> = (props) => {
             </div>
         </header>
     );
-};
+});

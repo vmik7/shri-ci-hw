@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo } from 'react';
+import { memo, useCallback, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { classnames } from '@bem-react/classnames';
 
@@ -20,7 +20,7 @@ import { IBuildListProps } from './types';
 
 import './style.scss';
 
-export const BuildList: FC<IBuildListProps> = (props) => {
+export const BuildList = memo<IBuildListProps>((props) => {
     const { contentClass, loadData } = props;
 
     const dispatch = useDispatch();
@@ -125,4 +125,4 @@ export const BuildList: FC<IBuildListProps> = (props) => {
             </div>
         </>
     );
-};
+});
