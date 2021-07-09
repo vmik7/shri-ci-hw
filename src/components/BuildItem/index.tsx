@@ -98,7 +98,9 @@ export const BuildItem = memo<IBuildItemProps>((props) => {
                         <div className={cnBuildItem('branch')}>
                             {branchName}
                         </div>
-                        <div className={cnBuildItem('hash')}>{commitHash}</div>
+                        <div className={cnBuildItem('hash')}>
+                            {commitHash.slice(0, 7)}
+                        </div>
                     </div>
                     <div className={cnBuildItem('author')}>{authorName}</div>
                 </div>
