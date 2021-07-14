@@ -1,6 +1,6 @@
 import { useMemo, memo } from 'react';
 import { classnames } from '@bem-react/classnames';
-import { format } from 'date-fns';
+import { format, intervalToDuration, formatDuration } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 import { cn } from '../../common/';
@@ -10,6 +10,25 @@ import './style.scss';
 import iconSuccess from './icons/success.svg';
 import iconPending from './icons/pending.svg';
 import iconFail from './icons/fail.svg';
+
+function getDurationString(value: number) {
+    const duration = intervalToDuration({
+        start: 0,
+        end: value,
+    });
+    let result = '';
+    if (duration.hours) {
+        result = `${duration.hours} ч ${duration.minutes} мин`;
+    } else if (duration.minutes) {
+        result = `${duration.minutes} мин ${duration.seconds} с`;
+    } else {
+        result = formatDuration(duration, {
+            format: ['seconds'],
+            locale: ru,
+        });
+    }
+    return result;
+}
 
 export const BuildItem = memo<IBuildItemProps>((props) => {
     const { data, extraClasses, isDetailed, onClick } = props;
@@ -40,16 +59,10 @@ export const BuildItem = memo<IBuildItemProps>((props) => {
         () =>
             duration ? (
                 <div className={cnBuildItem('duration')}>
-                    {(() => {
-                        const durationHours = Math.floor(duration / 60);
-                        const durationMinutes = duration % 60;
-                        return `${
-                            durationHours ? durationHours + ' ч ' : ''
-                        }${durationMinutes} мин`;
-                    })()}
+                    {getDurationString(duration)}
                 </div>
             ) : null,
-        [duration, cnBuildItem, format, ru],
+        [duration, cnBuildItem, getDurationString],
     );
 
     let statusMod, icon;
