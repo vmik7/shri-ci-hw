@@ -125,7 +125,7 @@ export const Settings = memo<ISettingsProps>((props) => {
                             required
                             extraClasses={cnSettings('input')}
                             name="repo"
-                            onChange={onRepositoryChange}
+                            onChangeHandler={onRepositoryChange}
                         />
                         <TextField
                             value={data ? data.buildCommand : ''}
@@ -135,7 +135,7 @@ export const Settings = memo<ISettingsProps>((props) => {
                             required
                             extraClasses={cnSettings('input')}
                             name="build"
-                            onChange={onBuildCommandChange}
+                            onChangeHandler={onBuildCommandChange}
                         />
                         <TextField
                             value={data ? data.mainBranch : ''}
@@ -144,7 +144,7 @@ export const Settings = memo<ISettingsProps>((props) => {
                             labelText="Main branch"
                             extraClasses={cnSettings('input')}
                             name="branch"
-                            onChange={onMainBranchChange}
+                            onChangeHandler={onMainBranchChange}
                         />
                         <div className={cnSettings('input', { inline: true })}>
                             Synchronize every
@@ -153,7 +153,7 @@ export const Settings = memo<ISettingsProps>((props) => {
                                 placeholder="10"
                                 isInline={true}
                                 name="period"
-                                onChange={onPeriodChange}
+                                onChangeHandler={onPeriodChange}
                             />
                             minutes
                         </div>

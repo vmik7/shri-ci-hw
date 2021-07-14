@@ -8,5 +8,5 @@ export interface IComponentProps {
 
 export interface IPageProps {
     contentClass?: string;
-    loadData: (dispatch: Dispatch<any>, params?: any) => void;
+    loadData: (dispatch: Dispatch, params?: any) => void;
 }

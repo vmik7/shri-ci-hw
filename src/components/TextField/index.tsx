@@ -12,18 +12,21 @@ export const TextField = memo<ITextFieldProps>((props) => {
         labelText,
         isInline,
         extraClasses,
-        onChange,
+        onChangeHandler,
         ...inputAttributes
     } = props;
 
     const cnTextField = cn('text-field');
     const WrapperTag = isInline ? 'span' : 'div';
 
-    const onChangeHandler = useCallback(
-        (e) => onChange(e.target.value),
-        [onChange],
+    const onChangeCallback = useCallback(
+        (e) => onChangeHandler(e.target.value),
+        [onChangeHandler],
     );
-    const onClearHandler = useCallback(() => onChange(''), [onChange]);
+    const onClearHandler = useCallback(
+        () => onChangeHandler(''),
+        [onChangeHandler],
+    );
 
     const clearButtonMemo = useMemo(
         () =>
@@ -44,7 +47,7 @@ export const TextField = memo<ITextFieldProps>((props) => {
             <input
                 className={cnTextField('input')}
                 {...inputAttributes}
-                onChange={onChangeHandler}
+                onChange={onChangeCallback}
             />
             {clearButtonMemo}
         </>

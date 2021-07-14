@@ -10,5 +10,5 @@ export interface ITextFieldProps
     isLabeled?: boolean;
     labelText?: string;
     isInline?: boolean;
-    onChange(value: string): void;
+    onChangeHandler(value: string): void;
 }

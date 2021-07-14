@@ -33,7 +33,7 @@ export type Build = {
     commitHash: string;
     branchName: string;
     authorName: string;
-    status: buildStatus;
+    status: BuildStatus;
     start?: string;
     duration?: number;
 };

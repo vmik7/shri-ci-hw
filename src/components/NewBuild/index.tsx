@@ -89,7 +89,7 @@ export const NewBuild = memo<INewBuildProps>((props) => {
                         required
                         extraClasses={cnNewBuild('input')}
                         name="hash"
-                        onChange={onChangeHandler}
+                        onChangeHandler={onChangeHandler}
                         value={hash}
                     />
                     <div className={cnNewBuild('controls')}>

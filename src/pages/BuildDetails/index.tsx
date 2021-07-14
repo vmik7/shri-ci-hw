@@ -43,7 +43,7 @@ export const BuildDetails = memo<IBuildDetailsProps>((props) => {
                 history,
             }),
         );
-    }, [dispatch, data.commitHash, history]);
+    }, [dispatch, data, history]);
 
     const onSettingsHandler = useCallback(() => {
         history.push('/settings');
