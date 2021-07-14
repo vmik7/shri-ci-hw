@@ -14,6 +14,10 @@ const initialState: IBuildDetailsState = {
     isLoaded: false,
     loadError: null,
 
+    isLogsLoading: false,
+    isLogsLoaded: false,
+    loadLogsError: null,
+
     rebuild: null,
 
     isRebuilding: false,
@@ -22,13 +26,21 @@ const initialState: IBuildDetailsState = {
 };
 
 export const fetchBuildById = createAsyncThunk<
-    { data: Build; logs: string },
+    { data: Build },
     string,
     AsyncThunkConfig
 >(`${buildDetailsSliceName}/fetch`, async (id, { extra: { api } }) => {
     const { data } = await api.getBuildById(id);
+    return { data };
+});
+
+export const fetchLogsById = createAsyncThunk<
+    { id: string; logs: string },
+    string,
+    AsyncThunkConfig
+>(`${buildDetailsSliceName}/logs`, async (id, { extra: { api } }) => {
     const { data: logs } = await api.getBuildLogs(id);
-    return { data, logs };
+    return { id, logs };
 });
 
 export const fetchRebuild = createAsyncThunk<
@@ -60,12 +72,11 @@ export const buildSlice = createSlice({
                 fetchBuildById.fulfilled,
                 (
                     state: IBuildDetailsState,
-                    action: PayloadAction<{ data: Build; logs: string }>,
+                    action: PayloadAction<{ data: Build }>,
                 ) => {
-                    const { data, logs } = action.payload;
+                    const { data } = action.payload;
 
                     state.data[data.id] = data;
-                    state.logs[data.id] = logs;
 
                     state.isLoading = false;
                     state.isLoaded = true;
@@ -74,6 +85,30 @@ export const buildSlice = createSlice({
             .addCase(fetchBuildById.rejected, (state: IBuildDetailsState) => {
                 state.isLoading = false;
                 state.loadError = 'Ошибка запроса данных';
+            })
+
+            .addCase(fetchLogsById.pending, (state: IBuildDetailsState) => {
+                state.isLogsLoading = true;
+                state.isLogsLoaded = false;
+                state.loadLogsError = null;
+            })
+            .addCase(
+                fetchLogsById.fulfilled,
+                (
+                    state: IBuildDetailsState,
+                    action: PayloadAction<{ id: string; logs: string }>,
+                ) => {
+                    const { id, logs } = action.payload;
+
+                    state.logs[id] = logs;
+
+                    state.isLogsLoading = false;
+                    state.isLogsLoaded = true;
+                },
+            )
+            .addCase(fetchLogsById.rejected, (state: IBuildDetailsState) => {
+                state.isLogsLoading = false;
+                state.loadLogsError = 'Ошибка запроса logs';
             })
 
             .addCase(fetchRebuild.pending, (state: IBuildDetailsState) => {

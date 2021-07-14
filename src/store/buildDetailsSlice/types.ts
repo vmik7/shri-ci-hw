@@ -12,6 +12,10 @@ export interface IBuildDetailsState {
     isLoaded: boolean;
     loadError: string | null;
 
+    isLogsLoading: boolean;
+    isLogsLoaded: boolean;
+    loadLogsError: string | null;
+
     rebuild: BuildPostResult | null;
 
     isRebuilding: boolean;

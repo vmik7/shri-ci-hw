@@ -61,7 +61,7 @@ export const BuildDetails = memo<IBuildDetailsProps>((props) => {
                     <BuildItem data={data} isDetailed={true} />
                     <BuildLog
                         extraClasses={cnBuildDetails('logs')}
-                        logs={logs}
+                        logs={logs || 'Loading...'}
                     />
                 </div>
             ) : null,

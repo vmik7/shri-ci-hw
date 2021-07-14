@@ -1,7 +1,16 @@
 .build-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
     &__container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
     }
     &__logs {
+        flex: 1;
         margin-top: 12px;
     }
 }
