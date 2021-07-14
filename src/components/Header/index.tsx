@@ -1,6 +1,8 @@
 import { memo, useMemo } from 'react';
-import { cn } from '../../common/';
+import { Link } from 'react-router-dom';
 import { classnames } from '@bem-react/classnames';
+
+import { cn } from '../../common/';
 
 import { Button } from '../Button';
 
@@ -33,7 +35,11 @@ export const Header = memo<IHeaderProps>((props) => {
             className={classnames(cnHeader({ faded: isFaded }), extraClasses)}
         >
             <div className={classnames(cnHeader('container'), 'container')}>
-                <h1 className={cnHeader('title')}>{title}</h1>
+                <h1 className={cnHeader('title')}>
+                    <Link to="/" className={cnHeader('link')}>
+                        {title}
+                    </Link>
+                </h1>
                 {buttonsMemo}
             </div>
         </header>
