@@ -14,6 +14,7 @@ import {
     getHash,
     postBuild,
     getNewBuildData,
+    nullSubmitError,
 } from '../../store/newBuildSlice';
 import { closeModal } from '../../store/buildsSlice';
 
@@ -47,6 +48,7 @@ export const NewBuild = memo<INewBuildProps>((props) => {
 
     if (submitError) {
         alert(`Ошибка!\n\n${submitError}`);
+        dispatch(nullSubmitError());
     }
 
     if (newBuildData) {

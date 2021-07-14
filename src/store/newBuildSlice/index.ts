@@ -31,6 +31,9 @@ export const newBuildSlice = createSlice({
         setHash(store, action: PayloadAction<string>) {
             store.hash = action.payload;
         },
+        nullSubmitError(store) {
+            store.submitError = null;
+        },
     },
 
     extraReducers: (builder) => {
@@ -64,7 +67,7 @@ export const newBuildSlice = createSlice({
 
 /** Reducer */
 
-export const { setHash } = newBuildSlice.actions;
+export const { reducer: newBuillReducer } = newBuildSlice;
 
 /** Selectors */
 
@@ -84,4 +87,4 @@ export const getSubmittingStatus = () => (state: RootState) => {
 
 /** Actions */
 
-export const { reducer: newBuillReducer } = newBuildSlice;
+export const { setHash, nullSubmitError } = newBuildSlice.actions;
