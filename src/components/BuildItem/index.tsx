@@ -91,6 +91,7 @@ export const BuildItem = memo<IBuildItemProps>((props) => {
                 cnBuildItem({
                     status: statusMod,
                     deatiled: isDetailed,
+                    clickable: Boolean(onClick),
                 }),
                 extraClasses,
             )}

@@ -21,11 +21,13 @@
 
     position: relative;
 
-    transition: box-shadow 0.3s ease;
-    &:hover,
-    &:focus-visible {
-        box-shadow: 0px 0px 1px rgba(67, 68, 69, 0.3),
-            0px 2px 8px rgba(67, 68, 69, 0.3);
+    &_clickable {
+        transition: box-shadow 0.3s ease;
+        &:hover,
+        &:focus {
+            box-shadow: 0px 0px 1px rgba(67, 68, 69, 0.3),
+                0px 2px 8px rgba(67, 68, 69, 0.3);
+        }
         cursor: pointer;
     }
 
