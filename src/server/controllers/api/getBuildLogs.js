@@ -16,12 +16,16 @@ module.exports = async (req, res) => {
     };
 
     // TODO: Долго обрабатывается запрос, надо придумать кеширование. Пока что довольствуемся заглушкой
-    // axios
-    //     .get('/build/log', currentConfig)
-    //     .then((response) => res.json(response.data))
-    //     .catch((error) => res.send(error));
+    axios
+        .get('/build/log', currentConfig)
+        .then((response) =>
+            res.json({
+                data: response.data,
+            }),
+        )
+        .catch((error) => res.send(error));
 
-    res.json({
-        data: getStubLogs(),
-    });
+    // res.json({
+    //     data: getStubLogs(),
+    // });
 };

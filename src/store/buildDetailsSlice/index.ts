@@ -27,7 +27,7 @@ export const fetchBuildById = createAsyncThunk<
     AsyncThunkConfig
 >(`${buildDetailsSliceName}/fetch`, async (id, { extra: { api } }) => {
     const { data } = await api.getBuildById(id);
-    const logs = await api.getBuildLogs(id);
+    const { data: logs } = await api.getBuildLogs(id);
     return { data, logs };
 });
 

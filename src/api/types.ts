@@ -5,7 +5,9 @@ export interface IApi {
     getBuildById(id: string): Promise<{
         data: Build;
     }>;
-    getBuildLogs(id: string): Promise<string>;
+    getBuildLogs(id: string): Promise<{
+        data: string;
+    }>;
     getSettings(): Promise<{
         data: Configuration;
     }>;
