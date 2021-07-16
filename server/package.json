@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node dist/index",
     "watch": "nodemon dist/index",
-    "tsc": "tsc --resolveJsonModule"
+    "build": "tsc --resolveJsonModule"
   },
   "keywords": [],
   "author": "",
