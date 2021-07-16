@@ -1,4 +1,4 @@
-module.exports = `[2K[1G[1myarn run v1.22.5[22m
+export default `[2K[1G[1myarn run v1.22.5[22m
     [2K[1G[2m$ webpack --config webpack/production.js --color[22m
     /Users/fedinamid/Workspace/webpack-config/webpack
     Hash: [1m2a88f51a3c1cffdbdac8[39m[22m

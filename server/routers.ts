@@ -1,11 +1,11 @@
-const { Router } = require('express');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
-const api = require('./controllers/api');
+import { Router } from 'express';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './swagger.json';
+import * as api from './controllers/api';
 
 // routes for /api
 
-const apiRouter = new Router();
+export const apiRouter = Router();
 
 apiRouter.get('/settings', api.getSettings);
 apiRouter.post('/settings', api.saveSettings);
@@ -14,11 +14,9 @@ apiRouter.post('/builds/:commitHash', api.addBuild);
 apiRouter.get('/builds/:buildId', api.getBuildInfo);
 apiRouter.get('/builds/:buildId/logs', api.getBuildLogs);
 
-exports.apiRouter = apiRouter;
-
 // routes for /
 
-const mainRouter = new Router();
+export const mainRouter = Router();
 
 mainRouter.get('/', (req, res) => {
     res.send('hello world');
@@ -26,5 +24,3 @@ mainRouter.get('/', (req, res) => {
 
 mainRouter.use('/api-docs', swaggerUi.serve);
 mainRouter.get('/api-docs', swaggerUi.setup(swaggerDocument));
-
-exports.mainRouter = mainRouter;

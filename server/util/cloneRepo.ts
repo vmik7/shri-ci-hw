@@ -1,11 +1,11 @@
-const fs = require('fs');
-const path = require('path');
-const util = require('util');
-const { repoFolderName } = require('../config');
+import fs from 'fs';
+import path from 'path';
+import util from 'util';
+import { repoFolderName } from '../config';
 
 const execFile = util.promisify(require('child_process').execFile);
 
-module.exports = async (repoUrl) => {
+export const cloneRepo = async (repoUrl: string) => {
     try {
         await fs.promises.rm(path.resolve(repoFolderName), {
             recursive: true,

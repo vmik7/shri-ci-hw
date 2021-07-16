@@ -1,19 +1,37 @@
-const { v4: uuidv4 } = require('uuid');
+import path from 'path';
+import util from 'util';
+import { execFile } from 'child_process';
+import { v4 as uuidv4 } from 'uuid';
 
-const path = require('path');
-const util = require('util');
-const { repoFolderName } = require('../config');
+import { repoFolderName } from '../config';
 
-const execFile = util.promisify(require('child_process').execFile);
+const execFileP = util.promisify(execFile);
 
-module.exports = async (commitHash) => {
-    const result = {
+interface ICommitDetails {
+    successful: boolean;
+    params: {
+        commitHash: string;
+        branchName: string;
+        authorName: string;
+        commitMessage: string;
+    };
+}
+
+export async function getCommitDetails(
+    commitHash: string,
+): Promise<ICommitDetails> {
+    const result: ICommitDetails = {
         successful: true,
-        params: { commitHash },
+        params: {
+            commitHash,
+            branchName: '',
+            authorName: '',
+            commitMessage: '',
+        },
     };
 
     try {
-        const { stdout: gitBranchOutput } = await execFile(
+        const { stdout: gitBranchOutput } = await execFileP(
             'git',
             ['branch', '--contains', commitHash],
             { cwd: path.resolve(repoFolderName) },
@@ -27,12 +45,13 @@ module.exports = async (commitHash) => {
         if (branchName) {
             result.params.branchName = branchName;
         } else {
-            return { successful: false };
+            result.successful = false;
+            return result;
         }
 
         const divider = uuidv4();
 
-        const { stdout: gitLogOutput } = await execFile(
+        const { stdout: gitLogOutput } = await execFileP(
             'git',
             [
                 'log',
@@ -48,12 +67,14 @@ module.exports = async (commitHash) => {
             [result.params.authorName, result.params.commitMessage] =
                 currentLog;
         } else {
-            return { successful: false };
+            result.successful = false;
+            return result;
         }
     } catch (e) {
         console.error(e);
-        return { successful: false };
+        result.successful = false;
+        return result;
     }
 
     return result;
-};
+}

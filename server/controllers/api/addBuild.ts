@@ -1,22 +1,22 @@
-const axios = require('axios');
-const { axiosConfig } = require('../../config');
+import { Request, Response } from 'express';
+import { axiosInstance } from '../../config';
+import { getCommitDetails } from '../../util/getCommitDetails';
 
-const getCommitDetails = require('../../util/getCommitDetails');
-
-module.exports = async (req, res) => {
+export const addBuild = async (req: Request, res: Response) => {
     const { commitHash } = req.params;
-
-    const currentConfig = { ...axiosConfig };
-    currentConfig.headers['Content-Type'] = 'application/json';
 
     const { successful, params } = await getCommitDetails(commitHash);
 
     if (successful) {
         try {
-            const response = await axios.post(
+            const response = await axiosInstance.post(
                 '/build/request',
                 params,
-                currentConfig,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
             );
             res.json({ isAdded: true, ...response.data });
         } catch (error) {
