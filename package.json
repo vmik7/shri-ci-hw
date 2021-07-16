@@ -1,88 +1,30 @@
 {
   "name": "shri-ci-hw",
-  "version": "0.1.0",
-  "engineStrict": true,
-  "engines": {
-    "node": "^14.17.0"
-  },
-  "private": true,
-  "dependencies": {
-    "@bem-react/classname": "^1.5.11",
-    "@bem-react/classnames": "^1.3.10",
-    "@reduxjs/toolkit": "^1.6.0",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.0.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@types/react-redux": "^7.1.16",
-    "ansi-to-react": "^6.1.5",
-    "axios": "^0.21.1",
-    "cors": "^2.8.5",
-    "date-fns": "^2.22.1",
-    "delay": "^5.0.0",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "morgan": "^1.10.0",
-    "node-fetch": "^2.6.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-redux": "^7.2.4",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
-    "redux": "^4.1.0",
-    "swagger-ui-express": "^4.1.6",
-    "uuid": "^8.3.2",
-    "web-vitals": "^1.0.1"
-  },
+  "version": "1.0.0",
   "scripts": {
-    "start": "react-scripts start",
-    "server": "nodemon --watch src/server src/server/index.js",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "hermione": "npx hermione gui hermione/tests --retry 1",
-    "eject": "react-scripts eject",
     "prettify": "prettier src --write",
     "precommit": "lint-staged",
     "prepare": "husky install"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vmik7/shri-ci-hw.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vmik7/shri-ci-hw/issues"
+  },
+  "homepage": "https://github.com/vmik7/shri-ci-hw#readme",
+  "devDependencies": {
+    "husky": "^7.0.1",
+    "lint-staged": "^11.0.1",
+    "prettier": "^2.3.2"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "prettier --write"
     ],
     "*.{scss,css,md}": "prettier --write"
-  },
-  "devDependencies": {
-    "@types/react-router-dom": "^5.1.7",
-    "assert": "^2.0.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "hermione": "^4.1.1",
-    "hermione-selenium-runner": "git+https://github.com/vmik7/hermione-selenium-runner.git",
-    "hermione-url-decorator": "git+https://github.com/vmik7/hermione-url-decorator.git",
-    "html-reporter": "^7.0.2",
-    "husky": "^6.0.0",
-    "lint-staged": "^11.0.0",
-    "node-sass": "4.14.1",
-    "nodemon": "^2.0.7",
-    "prettier": "^2.3.1",
-    "sass-loader": "^10.2.0",
-    "typescript": "^4.3.4",
-    "url-decorator": "^2.1.2",
-    "yarn": "^1.22.10"
   }
 }

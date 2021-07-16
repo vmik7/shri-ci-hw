@@ -1,6 +1,8 @@
 import { IApi, BuildListParams, ConfigurationPost, BuildPost } from './types';
 
-import { PORT, testModeQuery } from '../server/config';
+const PORT = 8085;
+const testModeQuery = 'test_mode';
+
 const API = `http://localhost:${PORT}/api`;
 
 export class Api implements IApi {

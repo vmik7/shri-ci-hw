@@ -66,7 +66,3 @@ axios
         setUpdateInterval();
     })
     .catch(console.error);
-
-// TODO: Типизация
-// TODO: Сброс настроек по смене репозитория
-// TODO: SSR

@@ -1,4 +1,4 @@
-const { testModeQuery } = require('./src/server/config');
+const testModeQuery = 'test_mode';
 
 module.exports = {
     baseUrl: 'http://localhost:3000/',
