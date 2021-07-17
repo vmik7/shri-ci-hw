@@ -10,15 +10,20 @@ import { config } from '../config';
 export const getBuildList = (req: Request, res: Response) => {
     console.log('GET BuildList');
 
+    const params: api.BuildListParams = {
+        offset: +req.params.offset || 0,
+        limit: +req.params.limit || 25,
+    };
+
     /* Заглушка для тестов */
     if (req.query[config.testModeQuery]) {
         res.json(mocks.builds);
         return;
     }
 
-    api.getBuildList(req.params as api.BuildListParams)
-        .then(res.json)
-        .catch(res.status(400).end);
+    api.getBuildList(params)
+        .then((data) => res.json(data))
+        .catch((error) => res.status(400).end(error));
 };
 
 export const getBuildDetails = (req: Request, res: Response) => {
@@ -31,8 +36,8 @@ export const getBuildDetails = (req: Request, res: Response) => {
     }
 
     api.getBuildDetails(req.params as api.BuildDetailsParams)
-        .then(res.json)
-        .catch(res.status(400).end);
+        .then((data) => res.json(data))
+        .catch((error) => res.status(400).end(error));
 };
 
 export const getBuildLogs = (req: Request, res: Response) => {
@@ -47,8 +52,8 @@ export const getBuildLogs = (req: Request, res: Response) => {
     // TODO Запрос логов долгий. Продумать кэш
 
     api.getBuildLog(req.params as api.BuildLogParams)
-        .then(res.json)
-        .catch(res.status(400).end);
+        .then((data) => res.end(data))
+        .catch((error) => res.status(400).end(error));
 };
 
 export const requestBuild = (req: Request, res: Response) => {
@@ -81,8 +86,8 @@ export const requestBuild = (req: Request, res: Response) => {
                 branchName,
             }),
         )
-        .then(res.json)
-        .catch(res.status(400).end);
+        .then((data) => res.json(data))
+        .catch((error) => res.status(400).end(error));
 };
 
 export const getSettings = (req: Request, res: Response) => {
@@ -94,7 +99,9 @@ export const getSettings = (req: Request, res: Response) => {
         return;
     }
 
-    api.getConfiguration().then(res.json).catch(res.status(400).end);
+    api.getConfiguration()
+        .then((data) => res.json(data))
+        .catch((error) => res.status(400).end(error));
 };
 
 export const postSettings = async (req: Request, res: Response) => {
@@ -123,6 +130,6 @@ export const postSettings = async (req: Request, res: Response) => {
         .then(() =>
             api.postConfiguration(req.body as api.ConfigurationPostData),
         )
-        .then(() => res.status(200).end())
-        .catch(res.status(400).end);
+        .then(() => res.status(400).end())
+        .catch((error) => res.status(400).end(error));
 };

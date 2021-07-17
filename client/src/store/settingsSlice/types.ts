@@ -1,4 +1,4 @@
-import { Configuration } from '../../api/types';
+import { Configuration } from '../../api';
 
 export interface ISettingsState {
     data: Configuration;

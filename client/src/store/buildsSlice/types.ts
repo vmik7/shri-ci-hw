@@ -1,4 +1,4 @@
-import { Build } from '../../api/types';
+import { Build } from '../../api';
 
 export interface IBuildsState {
     data: Build[];

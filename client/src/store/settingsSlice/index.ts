@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Configuration, ConfigurationPostResponse } from '../../api/types';
+import { Configuration } from '../../api';
 import { AsyncThunkConfig, RootState } from '../types';
 import { ISettingsState } from './types';
 
@@ -28,27 +28,26 @@ export const fetchSettings = createAsyncThunk<
     void,
     AsyncThunkConfig
 >(`${settingsSliceName}/fetch`, async (_, { extra: { api } }) => {
-    const { data } = await api.getSettings();
+    const config = await api.getSettings();
 
     /** Custom metric: settingsLoaded */
     dispatchEvent(new Event('settingsLoaded'));
 
-    return data;
+    return config;
 });
 
-export const setSettings = createAsyncThunk<
-    ConfigurationPostResponse,
-    void,
-    AsyncThunkConfig
->(`${settingsSliceName}/post`, async (_, { extra: { api }, getState }) => {
-    const settingsData = getState()[settingsSliceName].data;
-    return await api.postSettings({
-        repoName: settingsData.repoName,
-        buildCommand: settingsData.buildCommand,
-        mainBranch: settingsData.mainBranch,
-        period: settingsData.period,
-    });
-});
+export const setSettings = createAsyncThunk<void, void, AsyncThunkConfig>(
+    `${settingsSliceName}/post`,
+    async (_, { extra: { api }, getState }) => {
+        const settingsData = getState()[settingsSliceName].data;
+        return api.postSettings({
+            repoName: settingsData.repoName,
+            buildCommand: settingsData.buildCommand,
+            mainBranch: settingsData.mainBranch,
+            period: settingsData.period,
+        });
+    },
+);
 
 export const settingsSlice = createSlice({
     name: settingsSliceName,
@@ -106,20 +105,10 @@ export const settingsSlice = createSlice({
                 state.isSaved = false;
                 state.saveError = null;
             })
-            .addCase(
-                setSettings.fulfilled,
-                (
-                    state: ISettingsState,
-                    action: PayloadAction<ConfigurationPostResponse>,
-                ) => {
-                    state.isSaving = false;
-                    if (action.payload.isSaved) {
-                        state.isSaved = true;
-                    } else if (action.payload.errorMessage) {
-                        state.saveError = action.payload.errorMessage;
-                    }
-                },
-            )
+            .addCase(setSettings.fulfilled, (state: ISettingsState) => {
+                state.isSaving = false;
+                state.isSaved = true;
+            })
             .addCase(setSettings.rejected, (state: ISettingsState) => {
                 state.isSaving = false;
                 state.saveError = 'Ошибка сохранения настроек';

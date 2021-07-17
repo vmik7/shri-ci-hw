@@ -5,7 +5,6 @@ export type History = ReturnType<typeof useHistory>;
 export interface IComponentProps {
     extraClasses?: string;
 }
-
 export interface IPageProps {
     contentClass?: string;
     loadData: (dispatch: Dispatch, params?: any) => void;

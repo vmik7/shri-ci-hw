@@ -1,4 +1,4 @@
-import { BuildStatus, BuildPostResult } from '../../api/types';
+import { BuildRequestResult } from '../../api';
 
 export interface INewBuildState {
     hash: string;
@@ -7,5 +7,5 @@ export interface INewBuildState {
     isSubmitted: boolean;
     submitError: string | null;
 
-    data: BuildPostResult | null;
+    data: BuildRequestResult | null;
 }

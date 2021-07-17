@@ -1,8 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { Api } from '../api/index';
-
-const testModeQuery = 'test_mode';
+import { Api, testModeQuery } from '../api';
 
 import {
     buildDetailsSliceName,

@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState, AsyncThunkConfig } from '../types';
-import { Build, BuildPostResponse } from '../../api/types';
+import { Build, BuildRequestResult } from '../../api';
 import { History } from '../../common/types';
-import { IBuildDetailsState } from './types';
+import { IBuildDetailsState, LogThunkResult } from './types';
 
 export const buildDetailsSliceName = 'buildDetails';
 
@@ -25,32 +25,30 @@ const initialState: IBuildDetailsState = {
     rebuildError: null,
 };
 
-export const fetchBuildById = createAsyncThunk<
-    { data: Build },
-    string,
-    AsyncThunkConfig
->(`${buildDetailsSliceName}/fetch`, async (id, { extra: { api } }) => {
-    const { data } = await api.getBuildById(id);
-    return { data };
-});
+export const fetchBuildById = createAsyncThunk<Build, string, AsyncThunkConfig>(
+    `${buildDetailsSliceName}/fetch`,
+    (id, { extra: { api } }) => {
+        return api.getBuildById({ buildId: id });
+    },
+);
 
-export const fetchLogsById = createAsyncThunk<
-    { id: string; logs: string },
+export const fetchLogById = createAsyncThunk<
+    LogThunkResult,
     string,
     AsyncThunkConfig
 >(`${buildDetailsSliceName}/logs`, async (id, { extra: { api } }) => {
-    const { data: logs } = await api.getBuildLogs(id);
-    return { id, logs };
+    const log = await api.getBuildLogById({ buildId: id });
+    return { id, log };
 });
 
 export const fetchRebuild = createAsyncThunk<
-    { response: BuildPostResponse; history: History },
+    { response: BuildRequestResult; history: History },
     { hash: string; history: History },
     AsyncThunkConfig
 >(
     `${buildDetailsSliceName}/rebuild`,
     async ({ hash, history }, { extra: { api } }) => {
-        const response = await api.postBuild({ commitHash: hash });
+        const response = await api.newBuild({ commitHash: hash });
         return { response, history };
     },
 );
@@ -70,13 +68,10 @@ export const buildSlice = createSlice({
             })
             .addCase(
                 fetchBuildById.fulfilled,
-                (
-                    state: IBuildDetailsState,
-                    action: PayloadAction<{ data: Build }>,
-                ) => {
-                    const { data } = action.payload;
+                (state: IBuildDetailsState, action: PayloadAction<Build>) => {
+                    const buildData = action.payload;
 
-                    state.data[data.id] = data;
+                    state.data[buildData.id] = buildData;
 
                     state.isLoading = false;
                     state.isLoaded = true;
@@ -87,26 +82,26 @@ export const buildSlice = createSlice({
                 state.loadError = 'Ошибка запроса данных';
             })
 
-            .addCase(fetchLogsById.pending, (state: IBuildDetailsState) => {
+            .addCase(fetchLogById.pending, (state: IBuildDetailsState) => {
                 state.isLogsLoading = true;
                 state.isLogsLoaded = false;
                 state.loadLogsError = null;
             })
             .addCase(
-                fetchLogsById.fulfilled,
+                fetchLogById.fulfilled,
                 (
                     state: IBuildDetailsState,
-                    action: PayloadAction<{ id: string; logs: string }>,
+                    action: PayloadAction<LogThunkResult>,
                 ) => {
-                    const { id, logs } = action.payload;
+                    const { id, log } = action.payload;
 
-                    state.logs[id] = logs;
+                    state.logs[id] = log;
 
                     state.isLogsLoading = false;
                     state.isLogsLoaded = true;
                 },
             )
-            .addCase(fetchLogsById.rejected, (state: IBuildDetailsState) => {
+            .addCase(fetchLogById.rejected, (state: IBuildDetailsState) => {
                 state.isLogsLoading = false;
                 state.loadLogsError = 'Ошибка запроса logs';
             })
@@ -121,7 +116,7 @@ export const buildSlice = createSlice({
                 (
                     state: IBuildDetailsState,
                     action: PayloadAction<{
-                        response: BuildPostResponse;
+                        response: BuildRequestResult;
                         history: History;
                     }>,
                 ) => {
@@ -129,14 +124,10 @@ export const buildSlice = createSlice({
 
                     const { response, history } = action.payload;
 
-                    if (response.isAdded && response.data) {
-                        state.rebuild = response.data || null;
-                        state.isRebuilded = true;
+                    state.rebuild = response;
+                    state.isRebuilded = true;
 
-                        history.push(`/build/${state.rebuild.id}`);
-                    } else if (response.errorMessage) {
-                        state.rebuildError = response.errorMessage;
-                    }
+                    history.push(`/build/${state.rebuild.id}`);
                 },
             )
             .addCase(fetchRebuild.rejected, (state: IBuildDetailsState) => {

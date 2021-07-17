@@ -1,4 +1,4 @@
-import { Build, BuildPostResult } from '../../api/types';
+import { Build, BuildRequestResult, BuildLog } from '../../api';
 
 export interface IBuildDetailsState {
     data: {
@@ -16,9 +16,14 @@ export interface IBuildDetailsState {
     isLogsLoaded: boolean;
     loadLogsError: string | null;
 
-    rebuild: BuildPostResult | null;
+    rebuild: BuildRequestResult | null;
 
     isRebuilding: boolean;
     isRebuilded: boolean;
     rebuildError: string | null;
+}
+
+export interface LogThunkResult {
+    id: string;
+    log: BuildLog;
 }

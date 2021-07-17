@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { AsyncThunkConfig, RootState } from '../types';
-import { Build } from '../../api/types';
+import { Build } from '../../api';
 
 import { IBuildsState } from './types';
 
@@ -22,19 +22,19 @@ const initialState: IBuildsState = {
 export const fetchBuilds = createAsyncThunk<Build[], void, AsyncThunkConfig>(
     `${buildsSliceName}/fetch`,
     async (_, { extra: { api }, dispatch }) => {
-        const { data } = await api.getBuildList({
+        const BuildList = await api.getBuildList({
             limit: buildsCountToLoad,
             offset: 0,
         });
 
-        if (data.length === 0) {
+        if (BuildList.length === 0) {
             dispatch(allLoaded());
         }
 
         /** Custom metric: buildListLoaded */
         dispatchEvent(new Event('buildListLoaded'));
 
-        return data;
+        return BuildList;
     },
 );
 
@@ -44,16 +44,16 @@ export const moreBuilds = createAsyncThunk<Build[], void, AsyncThunkConfig>(
         /** Custom metric: showMoreButtonPressed */
         dispatchEvent(new Event('showMoreButtonPressed'));
 
-        const { data } = await api.getBuildList({
+        const BuildList = await api.getBuildList({
             limit: buildsCountToLoad,
             offset: getState()[buildsSliceName].data.length,
         });
 
-        if (data.length === 0) {
+        if (BuildList.length === 0) {
             dispatch(allLoaded());
         }
 
-        return data;
+        return BuildList;
     },
 );
 

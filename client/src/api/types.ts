@@ -1,25 +1,4 @@
-export interface IApi {
-    getBuildList(params: BuildListParams): Promise<{
-        data: Build[];
-    }>;
-    getBuildById(id: string): Promise<{
-        data: Build;
-    }>;
-    getBuildLogs(id: string): Promise<{
-        data: string;
-    }>;
-    getSettings(): Promise<{
-        data: Configuration;
-    }>;
-    postSettings(data: ConfigurationPost): Promise<ConfigurationPostResponse>;
-    postBuild(data: BuildPost): Promise<BuildPostResponse>;
-}
-
-export type BuildListParams = {
-    limit?: number;
-    offset?: number;
-};
-
+/** Статус билда */
 export type BuildStatus =
     | 'Waiting'
     | 'InProgress'
@@ -27,6 +6,10 @@ export type BuildStatus =
     | 'Fail'
     | 'Canceled';
 
+/** Логи билда */
+export type BuildLog = string;
+
+/** Билд */
 export type Build = {
     id: string;
     configurationId: string;
@@ -40,22 +23,7 @@ export type Build = {
     duration?: number;
 };
 
-export type BuildPost = {
-    commitHash: string;
-};
-
-export type BuildPostResult = {
-    id: string;
-    buildNumber: number;
-    status: BuildStatus;
-};
-
-export type BuildPostResponse = {
-    isAdded: boolean;
-    data?: BuildPostResult;
-    errorMessage?: string;
-};
-
+/** Настройки */
 export type Configuration = {
     id: string;
     repoName: string;
@@ -64,14 +32,57 @@ export type Configuration = {
     period: number;
 };
 
-export type ConfigurationPost = {
-    repoName: string;
-    buildCommand: string;
-    mainBranch: string;
-    period: number;
+/** Параметры запроса списка билдов */
+export type BuildListParams = {
+    limit?: number;
+    offset?: number;
 };
 
-export type ConfigurationPostResponse = {
-    isSaved: boolean;
-    errorMessage?: string;
+/** Параметры запроса деталей билда */
+export type BuildDetailsParams = {
+    buildId: string;
 };
+
+/** Параметры запроса логов билда */
+export type BuildLogParams = {
+    buildId: string;
+};
+
+/** Данные post запроса на добавление билда */
+export type BuildRequestData = {
+    commitMessage: string;
+    commitHash: string;
+    branchName: string;
+    authorName: string;
+};
+
+export type NewBuildData = Pick<BuildRequestData, 'commitHash'>;
+
+/** Результат post запроса на добавление билда */
+export type BuildRequestResult = Pick<Build, 'id' | 'buildNumber' | 'status'>;
+
+/** Данные post запроса на старт билда */
+export type BuildStartData = {
+    buildId: string;
+    dateTime: string;
+};
+
+/** Данные post запроса на финиш билда */
+export type BuildFinishData = {
+    buildId: string;
+    duration: number;
+    success: string;
+    buildLog: string;
+};
+
+/** Данные post запроса на отмену билда */
+export type BuildCancelData = {
+    buildId: string;
+    dateTime: string;
+};
+
+/** Данные post запроса на сохранение настроек */
+export type ConfigurationPostData = Pick<
+    Configuration,
+    'repoName' | 'buildCommand' | 'mainBranch' | 'period'
+>;

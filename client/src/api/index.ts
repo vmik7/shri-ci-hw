@@ -1,9 +1,18 @@
-import { IApi, BuildListParams, ConfigurationPost, BuildPost } from './types';
+import * as types from './types';
+export * from './types';
 
-const PORT = 8085;
-const testModeQuery = 'test_mode';
+const baseApiUrl = `http://localhost:8085/api`;
 
-const API = `http://localhost:${PORT}/api`;
+export const testModeQuery = 'test_mode';
+export interface IApi {
+    getBuildList(params: types.BuildListParams): Promise<types.Build[]>;
+    getBuildById(params: types.BuildDetailsParams): Promise<types.Build>;
+    getBuildLogById(params: types.BuildLogParams): Promise<types.BuildLog>;
+    newBuild(data: types.NewBuildData): Promise<types.BuildRequestResult>;
+
+    getSettings(): Promise<types.Configuration>;
+    postSettings(data: types.ConfigurationPostData): void;
+}
 
 export class Api implements IApi {
     testMode: boolean;
@@ -12,55 +21,58 @@ export class Api implements IApi {
         this.testMode = testMode;
     }
 
-    async get(url: string, params?: any) {
-        let searchParams = new URLSearchParams(params);
+    get(url: string, params?: any) {
+        const searchParams = new URLSearchParams(params);
 
         if (this.testMode) {
             searchParams.append(testModeQuery, '1');
         }
 
-        let fullUrl = API + url;
-        if (params || this.testMode) {
-            fullUrl += '?' + searchParams.toString();
-        }
+        const fullUrl = baseApiUrl + url;
+        const fullUrlWithParams =
+            params || this.testMode
+                ? fullUrl + '?' + searchParams.toString()
+                : fullUrl;
 
-        const response = await fetch(fullUrl);
-        return await response.json();
+        return fetch(fullUrlWithParams);
     }
 
-    async post(url: string, data: object = {}) {
-        let fullUrl = API + url;
-        const response = await fetch(fullUrl, {
+    post(url: string, data: object = {}) {
+        const fullUrl = baseApiUrl + url;
+        return fetch(fullUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
         });
-        return await response.json();
     }
 
-    getBuildList(params: BuildListParams) {
-        return this.get('/builds', params);
+    getBuildList(params: types.BuildListParams) {
+        return this.get('/builds', params).then((res) => res.json());
     }
 
-    getBuildById(id: string) {
-        return this.get(`/builds/${id}`);
+    getBuildById(params: types.BuildDetailsParams) {
+        const { buildId } = params;
+        return this.get(`/builds/${buildId}`).then((res) => res.json());
     }
 
-    getBuildLogs(id: string) {
-        return this.get(`/builds/${id}/logs`);
+    getBuildLogById(params: types.BuildLogParams) {
+        const { buildId } = params;
+        return this.get(`/builds/${buildId}/logs`).then((res) => res.text());
     }
 
     getSettings() {
-        return this.get('/settings');
+        return this.get('/settings').then((res) => res.json());
     }
 
-    postSettings(data: ConfigurationPost) {
+    postSettings(data: types.ConfigurationPostData) {
         return this.post('/settings', data);
     }
 
-    postBuild(data: BuildPost) {
-        return this.post(`/builds/${data.commitHash}`);
+    newBuild(data: types.NewBuildData) {
+        return this.post(`/builds/${data.commitHash}`).then((res) =>
+            res.json(),
+        );
     }
 }

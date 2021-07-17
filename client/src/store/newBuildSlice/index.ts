@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { BuildPostResponse, BuildPostResult } from '../../api/types';
+import { BuildRequestResult } from '../../api';
 import { AsyncThunkConfig, RootState } from '../types';
 import { INewBuildState } from './types';
 
@@ -16,11 +16,11 @@ const initialState: INewBuildState = {
 };
 
 export const postBuild = createAsyncThunk<
-    BuildPostResponse,
+    BuildRequestResult,
     void,
     AsyncThunkConfig
 >(`${newBuildSliceName}/push`, async (_, { extra: { api }, getState }) => {
-    return api.postBuild({ commitHash: getState()[newBuildSliceName].hash });
+    return api.newBuild({ commitHash: getState()[newBuildSliceName].hash });
 });
 
 export const newBuildSlice = createSlice({
@@ -47,15 +47,11 @@ export const newBuildSlice = createSlice({
                 postBuild.fulfilled,
                 (
                     state: INewBuildState,
-                    action: PayloadAction<BuildPostResponse>,
+                    action: PayloadAction<BuildRequestResult>,
                 ) => {
                     state.isSubmitting = false;
-                    if (action.payload.isAdded) {
-                        state.data = action.payload.data || null;
-                        state.isSubmitted = true;
-                    } else if (action.payload.errorMessage) {
-                        state.submitError = action.payload.errorMessage;
-                    }
+                    state.data = action.payload;
+                    state.isSubmitted = true;
                 },
             )
             .addCase(postBuild.rejected, (state: INewBuildState) => {
