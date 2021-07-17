@@ -1,15 +1,25 @@
 import * as dotenv from 'dotenv';
+import axios, { AxiosInstance } from 'axios';
+
 dotenv.config();
 
-import axios from 'axios';
+export type Settings = {
+    port: number;
+    testModeQuery: string;
+    repoFolderName: string;
+    axiosInstance: AxiosInstance;
+    repoName: string;
+};
 
-export const PORT = 8085;
-export const testModeQuery = 'test_mode';
-export const repoFolderName = 'myrepo';
-export const axiosInstance = axios.create({
-    baseURL: 'https://shri.yandex/hw/api',
-    headers: {
-        Authorization: process.env.KEY,
-    },
-});
-export const minimalUpdateInterval = 1;
+export const config: Settings = {
+    port: 8085,
+    testModeQuery: 'test_mode',
+    repoFolderName: 'myrepo',
+    axiosInstance: axios.create({
+        baseURL: 'https://shri.yandex/hw/api',
+        headers: {
+            Authorization: process.env.KEY,
+        },
+    }),
+    repoName: '',
+};

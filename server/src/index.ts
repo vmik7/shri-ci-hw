@@ -1,50 +1,36 @@
+import path from 'path';
 import express from 'express';
 import cors from 'cors';
 
-import { PORT, axiosInstance, minimalUpdateInterval } from './config';
-import { apiRouter, mainRouter } from './routers';
-import { setUpdateInterval } from './util/updateInterval';
-import { cloneRepo } from './util/cloneRepo';
+import { config } from './config';
+import { apiRouter, mainRouter } from './router';
+import { getConfiguration } from './api';
+import * as git from './helpers/git';
 
 const app = express();
 
-// Cors
 app.use(
     cors({
         origin: ['http://localhost:3000'],
         methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
     }),
 );
-
 app.use(express.json());
 
-// api routes
 app.use('/api', apiRouter);
-
-// main routes
 app.use('/', mainRouter);
 
-app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
-});
+app.listen(config.port, () => {
+    console.log(`Server started on port ${config.port}`);
 
-// Getting config from API and setup updateInterval
-axiosInstance
-    .get('/conf')
-    .then((response) => {
-        let { repoName, period } = response.data.data;
-
-        if (period < minimalUpdateInterval) {
-            period = minimalUpdateInterval;
-        }
-
-        if (!repoName) {
-            console.log('Can not fetch settings! Exit...');
+    getConfiguration()
+        .then(({ repoName }) => {
+            const repoFolder = path.resolve(config.repoFolderName);
+            config.repoName = repoName;
+            return git.clone(repoFolder, repoName);
+        })
+        .catch((err) => {
+            console.error(err);
             process.exit(-1);
-        }
-
-        const repoUrl = `https://github.com/${repoName}.git`;
-        cloneRepo(repoUrl);
-        setUpdateInterval({ repoUrl, period });
-    })
-    .catch(console.error);
+        });
+});

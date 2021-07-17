@@ -1,20 +1,21 @@
 import { Router } from 'express';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json';
-import * as api from './controllers/api';
+import swaggerDocument from '../swagger.json';
+import * as api from '../controllers/api';
 
-// routes for /api
+/* Роутер для '/api' */
 
 export const apiRouter = Router();
 
 apiRouter.get('/settings', api.getSettings);
-apiRouter.post('/settings', api.saveSettings);
-apiRouter.get('/builds', api.getBuilds);
-apiRouter.post('/builds/:commitHash', api.addBuild);
-apiRouter.get('/builds/:buildId', api.getBuildInfo);
-apiRouter.get('/builds/:buildId/logs', api.getBuildLogs);
+apiRouter.post('/settings', api.postSettings);
 
-// routes for /
+apiRouter.get('/builds', api.getBuildList);
+apiRouter.get('/builds/:buildId', api.getBuildDetails);
+apiRouter.get('/builds/:buildId/logs', api.getBuildLogs);
+apiRouter.post('/builds/:commitHash', api.requestBuild);
+
+/* Роутер для '/' */
 
 export const mainRouter = Router();
 
