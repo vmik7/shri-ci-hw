@@ -44,6 +44,8 @@ export const getBuildLogs = (req: Request, res: Response) => {
         return;
     }
 
+    // TODO Запрос логов долгий. Продумать кэш
+
     api.getBuildLog(req.params as api.BuildLogParams)
         .then(res.json)
         .catch(res.status(400).end);
@@ -60,6 +62,8 @@ export const requestBuild = (req: Request, res: Response) => {
 
     const { commitHash } = req.params;
     const repoPath = path.resolve(config.repoFolderName);
+
+    // TODO Клонировать репозиторий каждый раз плохо. Перейти на GitHub API
 
     git.clone(repoPath, config.repoName)
         .then(() =>
