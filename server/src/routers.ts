@@ -18,9 +18,5 @@ apiRouter.get('/builds/:buildId/logs', api.getBuildLogs);
 
 export const mainRouter = Router();
 
-mainRouter.get('/', (req, res) => {
-    res.send('hello world');
-});
-
 mainRouter.use('/api-docs', swaggerUi.serve);
 mainRouter.get('/api-docs', swaggerUi.setup(swaggerDocument));
