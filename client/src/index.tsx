@@ -19,8 +19,3 @@ ReactDOM.render(
     </BrowserRouter>,
     document.getElementById('root'),
 );
-
-// TODO: Неправильная обработка форм
-// TODO: Сделать loader-иконку
-// TODO: Mock для тестов
-// TODO: Тесты
