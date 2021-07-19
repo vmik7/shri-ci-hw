@@ -19,8 +19,8 @@ export const getBuildList = (req: Request, res: Response) => {
     }
 
     const params: api.BuildListParams = {
-        offset: +req.params.offset || 0,
-        limit: +req.params.limit || 25,
+        offset: Number(req.query.offset) || 0,
+        limit: Number(req.query.limit) || 25,
     };
 
     api.getBuildList(params)
