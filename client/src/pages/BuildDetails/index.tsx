@@ -84,6 +84,18 @@ export const BuildDetails = memo<IBuildDetailsProps>((props) => {
         history.push('/settings');
     }, [history]);
 
+    const buildLogMemo = useMemo(
+        () =>
+            data?.status === 'Waiting' ||
+            data?.status === 'InProgress' ? null : (
+                <BuildLog
+                    extraClasses={cnBuildDetails('logs')}
+                    logs={logs === undefined ? 'Loading...' : logs ? logs : ''}
+                />
+            ),
+        [data, logs, cnBuildDetails],
+    );
+
     const buildMemo = useMemo(
         () =>
             data ? (
@@ -94,12 +106,7 @@ export const BuildDetails = memo<IBuildDetailsProps>((props) => {
                     )}
                 >
                     <BuildItem data={data} isDetailed={true} />
-                    <BuildLog
-                        extraClasses={cnBuildDetails('logs')}
-                        logs={
-                            logs === undefined ? 'Loading...' : logs ? logs : ''
-                        }
-                    />
+                    {buildLogMemo}
                 </div>
             ) : null,
         [data, logs, cnBuildDetails, classnames],
