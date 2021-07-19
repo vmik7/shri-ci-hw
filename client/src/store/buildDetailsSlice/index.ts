@@ -54,11 +54,11 @@ export const buildSlice = createSlice({
     initialState,
 
     reducers: {
-        nullRebuildError(store) {
-            store.rebuildError = null;
+        nullRebuildError(state: IBuildDetailsState) {
+            state.rebuildError = null;
         },
-        nullRebuildData(store) {
-            store.rebuild = null;
+        nullRebuildData(state: IBuildDetailsState) {
+            state.rebuild = null;
         },
     },
 

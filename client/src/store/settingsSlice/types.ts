@@ -7,6 +7,8 @@ export interface ISettingsState {
     isLoaded: boolean;
     loadError: string | null;
 
+    isChanged: boolean;
+
     isSaving: boolean;
     isSaved: boolean;
     saveError: string | null;

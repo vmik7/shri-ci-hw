@@ -1,6 +1,7 @@
-import { memo, useEffect, useCallback } from 'react';
+import { memo, useEffect, useCallback, useState } from 'react';
 import { useHistory } from 'react-router';
 import { classnames } from '@bem-react/classnames';
+import toast, { Toaster } from 'react-hot-toast';
 
 import { cn } from '../../common/';
 
@@ -12,10 +13,9 @@ import {
     getSettingsData,
     getSavingStatus,
     setSettings,
-    setRepoName,
-    setBuildCommand,
-    setMainBranch,
-    setPeriod,
+    fieldsChanged,
+    nullSaveError,
+    nullSaveStatus,
 } from '../../store/settingsSlice';
 
 import { Header } from '../../components/Header';
@@ -36,51 +36,82 @@ export const Settings = memo<ISettingsProps>((props) => {
     }, [dispatch]);
 
     const data = useSelector(getSettingsData());
-    const { isSaving, saveError } = useSelector(getSavingStatus());
+
+    const [repoName, setRepoName] = useState(data.repoName);
+    const [buildCommand, setBuildCommand] = useState(data.buildCommand);
+    const [mainBranch, setMainBranch] = useState(data.mainBranch);
+    const [period, setPeriod] = useState(data.period);
+
+    const { isSaving, saveError, isSaved, isChanged } = useSelector(
+        getSavingStatus(),
+    );
 
     const history = useHistory();
 
     const cnSettings = cn('settings');
 
     function validate() {
-        if (!data.repoName) {
+        if (!repoName) {
             return 'Имя репозитория - обязательное поле!';
         }
-        if (!data.buildCommand) {
+        if (!buildCommand) {
             return 'Команда для сборки - обязательное поле!';
         }
-        if (!/^[^\/]+\/[a-zA-Z0-9_-]+$/.test(data.repoName)) {
+        if (!/^[^\/]+\/[a-zA-Z0-9_-]+$/.test(repoName)) {
             return 'Ошибка! Github репозиторий должен быть задан в виде:\n\nимя-пользователя/название-репозитория';
         }
         return '';
     }
 
-    if (saveError) {
-        alert(
-            `Доступ к репозиторию ${data.repoName} невозможен!\n\n${saveError}`,
-        );
-    }
+    useEffect(() => {
+        setRepoName(data.repoName);
+        setBuildCommand(data.buildCommand);
+        setMainBranch(data.mainBranch);
+        setPeriod(data.period);
+    }, [data, setRepoName, setBuildCommand, setMainBranch, setPeriod]);
 
-    const onRepositoryChange = useCallback(
-        (value) => dispatch(setRepoName(value)),
-        [dispatch],
-    );
-    const onBuildCommandChange = useCallback(
-        (value) => dispatch(setBuildCommand(value)),
-        [dispatch],
-    );
-    const onMainBranchChange = useCallback(
-        (value) => dispatch(setMainBranch(value)),
-        [dispatch],
-    );
+    useEffect(() => {
+        dispatch(
+            fieldsChanged({
+                repoName,
+                buildCommand,
+                mainBranch,
+                period,
+            }),
+        );
+    }, [dispatch, fieldsChanged, repoName, buildCommand, mainBranch, period]);
+
+    useEffect(() => {
+        if (saveError) {
+            toast.error(`Доступ к репозиторию ${repoName} невозможен!`);
+            dispatch(nullSaveError());
+        }
+    }, [saveError, repoName, dispatch, nullSaveError, toast]);
+
+    useEffect(() => {
+        if (isSaving) {
+            const toastId = toast.loading(`Waiting...`);
+            return () => {
+                toast.dismiss(toastId);
+            };
+        }
+    }, [isSaving, toast]);
+
+    useEffect(() => {
+        if (isSaved) {
+            toast.success(`Настройки сохранены`);
+            dispatch(nullSaveStatus());
+        }
+    }, [isSaved, dispatch, nullSaveStatus, toast]);
+
     const onPeriodChange = useCallback(
         (value) => {
             value = value.trim();
             if (/^[0-9]*$/.test(value)) {
-                dispatch(setPeriod(+value));
+                setPeriod(+value);
             }
         },
-        [dispatch],
+        [dispatch, setPeriod],
     );
 
     const onSaveHandler = useCallback(
@@ -88,12 +119,19 @@ export const Settings = memo<ISettingsProps>((props) => {
             e.preventDefault();
             const errorMessage = validate();
             if (errorMessage) {
-                alert(errorMessage);
+                toast.error(errorMessage);
             } else {
-                dispatch(setSettings());
+                dispatch(
+                    setSettings({
+                        repoName,
+                        buildCommand,
+                        mainBranch,
+                        period,
+                    }),
+                );
             }
         },
-        [validate, dispatch],
+        [validate, dispatch, toast, repoName, buildCommand, mainBranch, period],
     );
     const onCancelHandler = useCallback(() => {
         history.push('/');
@@ -118,38 +156,38 @@ export const Settings = memo<ISettingsProps>((props) => {
                     </div>
                     <form>
                         <TextField
-                            value={data ? data.repoName : ''}
+                            value={repoName}
                             placeholder="user-name/repo-name"
                             isLabeled
                             labelText="GitHub repository"
                             required
                             extraClasses={cnSettings('input')}
                             name="repo"
-                            onChangeHandler={onRepositoryChange}
+                            onChangeHandler={setRepoName}
                         />
                         <TextField
-                            value={data ? data.buildCommand : ''}
+                            value={buildCommand}
                             placeholder="example: npm run build"
                             isLabeled
                             labelText="Build command"
                             required
                             extraClasses={cnSettings('input')}
                             name="build"
-                            onChangeHandler={onBuildCommandChange}
+                            onChangeHandler={setBuildCommand}
                         />
                         <TextField
-                            value={data ? data.mainBranch : ''}
+                            value={mainBranch}
                             placeholder="main"
                             isLabeled
                             labelText="Main branch"
                             extraClasses={cnSettings('input')}
                             name="branch"
-                            onChangeHandler={onMainBranchChange}
+                            onChangeHandler={setMainBranch}
                         />
                         <div className={cnSettings('input', { inline: true })}>
                             Synchronize every
                             <TextField
-                                value={data && data.period ? data.period : ''}
+                                value={period}
                                 placeholder="10"
                                 isInline={true}
                                 name="period"
@@ -165,7 +203,7 @@ export const Settings = memo<ISettingsProps>((props) => {
                                     action: 'save',
                                 })}
                                 onClick={onSaveHandler}
-                                disabled={isSaving}
+                                disabled={isSaving || !isChanged}
                             />
                             <Button
                                 text="Cancel"
@@ -179,6 +217,7 @@ export const Settings = memo<ISettingsProps>((props) => {
                     </form>
                 </div>
             </div>
+            <Toaster />
         </>
     );
 });

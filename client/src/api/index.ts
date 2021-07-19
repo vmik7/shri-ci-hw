@@ -11,7 +11,7 @@ export interface IApi {
     newBuild(data: types.NewBuildData): Promise<types.BuildRequestResult>;
 
     getSettings(): Promise<types.Configuration>;
-    postSettings(data: types.ConfigurationPostData): void;
+    postSettings(data: types.ConfigurationPostData): Promise<Response>;
 }
 
 export class Api implements IApi {

@@ -28,18 +28,18 @@ export const newBuildSlice = createSlice({
     initialState,
 
     reducers: {
-        setHash(store, action: PayloadAction<string>) {
-            store.hash = action.payload;
+        setHash(state: INewBuildState, action: PayloadAction<string>) {
+            state.hash = action.payload;
         },
-        nullSubmitError(store) {
-            store.submitError = null;
+        nullSubmitError(state: INewBuildState) {
+            state.submitError = null;
         },
-        nullNewBuildData(store) {
-            store.hash = '';
-            store.isSubmitting = false;
-            store.isSubmitted = false;
-            store.submitError = null;
-            store.data = null;
+        nullNewBuildData(state: INewBuildState) {
+            state.hash = '';
+            state.isSubmitting = false;
+            state.isSubmitted = false;
+            state.submitError = null;
+            state.data = null;
         },
     },
 

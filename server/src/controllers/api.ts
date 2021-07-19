@@ -182,16 +182,15 @@ export const postSettings = async (req: Request, res: Response) => {
             .then(
                 () => {
                     signale.complete('Current settings deleted successfully');
-                    config.repoName = repoName;
-                    return git.clone(repoFolder, repoName);
+                    return api.postConfiguration(
+                        req.body as api.ConfigurationPostData,
+                    );
                 },
                 (err) => {
                     signale.error(`Can not delete current settings!`);
                     signale.log(err);
                     res.status(400).end();
-                    return api.postConfiguration(
-                        req.body as api.ConfigurationPostData,
-                    );
+                    return Promise.reject();
                 },
             )
             .then(() => {
@@ -203,8 +202,6 @@ export const postSettings = async (req: Request, res: Response) => {
                 signale.log(err);
                 res.status(400).end();
             });
-
-        api.deleteConfiguration();
     } else {
         signale.note('Repository name is not changed');
         api.postConfiguration(req.body as api.ConfigurationPostData)

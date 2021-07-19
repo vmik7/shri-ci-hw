@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Configuration } from '../../api';
+import { Configuration, ConfigurationPostData } from '../../api';
 import { AsyncThunkConfig, RootState } from '../types';
 import { ISettingsState } from './types';
 
@@ -17,6 +17,8 @@ const initialState: ISettingsState = {
     isLoading: false,
     isLoaded: false,
     loadError: null,
+
+    isChanged: false,
 
     isSaving: false,
     isSaved: false,
@@ -36,38 +38,38 @@ export const fetchSettings = createAsyncThunk<
     return config;
 });
 
-export const setSettings = createAsyncThunk<void, void, AsyncThunkConfig>(
-    `${settingsSliceName}/post`,
-    async (_, { extra: { api }, getState }) => {
-        const settingsData = getState()[settingsSliceName].data;
-        return api.postSettings({
-            repoName: settingsData.repoName,
-            buildCommand: settingsData.buildCommand,
-            mainBranch: settingsData.mainBranch,
-            period: settingsData.period,
-        });
-    },
-);
+export const setSettings = createAsyncThunk<
+    void,
+    ConfigurationPostData,
+    AsyncThunkConfig
+>(`${settingsSliceName}/post`, async (data, { extra: { api }, dispatch }) => {
+    const response = await api.postSettings(data);
+    if (response.ok) {
+        dispatch(fetchSettings());
+    } else {
+        throw new Error();
+    }
+});
 
 export const settingsSlice = createSlice({
     name: settingsSliceName,
     initialState,
 
     reducers: {
-        setRepoName(state: ISettingsState, action: PayloadAction<string>) {
-            state.data.repoName = action.payload;
-            state.isSaved = false;
+        fieldsChanged(
+            state: ISettingsState,
+            action: PayloadAction<ConfigurationPostData>,
+        ) {
+            state.isChanged =
+                state.data.repoName !== action.payload.repoName ||
+                state.data.buildCommand !== action.payload.buildCommand ||
+                state.data.mainBranch !== action.payload.mainBranch ||
+                state.data.period !== action.payload.period;
         },
-        setBuildCommand(state: ISettingsState, action: PayloadAction<string>) {
-            state.data.buildCommand = action.payload;
-            state.isSaved = false;
+        nullSaveError(state: ISettingsState) {
+            state.saveError = null;
         },
-        setMainBranch(state: ISettingsState, action: PayloadAction<string>) {
-            state.data.mainBranch = action.payload;
-            state.isSaved = false;
-        },
-        setPeriod(state: ISettingsState, action: PayloadAction<number>) {
-            state.data.period = action.payload;
+        nullSaveStatus(state: ISettingsState) {
             state.isSaved = false;
         },
     },
@@ -78,8 +80,6 @@ export const settingsSlice = createSlice({
                 state.isLoading = true;
                 state.isLoaded = false;
                 state.loadError = null;
-
-                state.isSaved = false;
             })
             .addCase(
                 fetchSettings.fulfilled,
@@ -92,7 +92,7 @@ export const settingsSlice = createSlice({
                     state.isLoading = false;
                     state.isLoaded = true;
 
-                    state.isSaved = true;
+                    state.isChanged = false;
                 },
             )
             .addCase(fetchSettings.rejected, (state: ISettingsState) => {
@@ -108,6 +108,7 @@ export const settingsSlice = createSlice({
             .addCase(setSettings.fulfilled, (state: ISettingsState) => {
                 state.isSaving = false;
                 state.isSaved = true;
+                state.isChanged = false;
             })
             .addCase(setSettings.rejected, (state: ISettingsState) => {
                 state.isSaving = false;
@@ -138,6 +139,7 @@ export const getLoadingStatus = () => (state: RootState) => {
 
 export const getSavingStatus = () => (state: RootState) => {
     return {
+        isChanged: state[settingsSliceName].isChanged,
         isSaving: state[settingsSliceName].isSaving,
         isSaved: state[settingsSliceName].isSaved,
         saveError: state[settingsSliceName].saveError,
@@ -146,5 +148,5 @@ export const getSavingStatus = () => (state: RootState) => {
 
 /** Actions */
 
-export const { setRepoName, setBuildCommand, setMainBranch, setPeriod } =
+export const { nullSaveError, nullSaveStatus, fieldsChanged } =
     settingsSlice.actions;
