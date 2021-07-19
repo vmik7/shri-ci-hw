@@ -56,6 +56,8 @@ export type BuildRequestData = {
     authorName: string;
 };
 
+export type NewBuildData = Pick<BuildRequestData, 'commitHash'>;
+
 /** Результат post запроса на добавление билда */
 export type BuildRequestResult = Pick<Build, 'id' | 'buildNumber' | 'status'>;
 

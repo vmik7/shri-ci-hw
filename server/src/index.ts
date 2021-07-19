@@ -1,6 +1,7 @@
 import path from 'path';
 import express from 'express';
 import cors from 'cors';
+import signale from 'signale';
 
 import { config } from './config';
 import { apiRouter, mainRouter } from './router';
@@ -21,7 +22,7 @@ app.use('/api', apiRouter);
 app.use('/', mainRouter);
 
 app.listen(config.port, () => {
-    console.log(`Server started on port ${config.port}`);
+    signale.start(`Server started on port ${config.port}`);
 
     getConfiguration()
         .then(({ repoName }) => {
@@ -30,7 +31,10 @@ app.listen(config.port, () => {
             return git.clone(repoFolder, repoName);
         })
         .catch((err) => {
-            console.error(err);
+            signale.error(
+                'Can not fetch configuration! Server will shutdown...',
+            );
+            signale.log(err);
             process.exit(-1);
         });
 });

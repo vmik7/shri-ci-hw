@@ -1,5 +1,6 @@
 import path from 'path';
 import { Request, Response } from 'express';
+import signale from 'signale';
 
 import * as api from '../api';
 import * as mocks from '../mocks';
@@ -8,59 +9,86 @@ import * as git from '../helpers/git';
 import { config } from '../config';
 
 export const getBuildList = (req: Request, res: Response) => {
-    console.log('GET BuildList');
+    signale.await('GET BuildList');
+
+    /* Заглушка для тестов */
+    if (req.query[config.testModeQuery]) {
+        signale.warn('GET BuildList return stub because of test mode!');
+        res.json(mocks.builds);
+        return;
+    }
 
     const params: api.BuildListParams = {
         offset: +req.params.offset || 0,
         limit: +req.params.limit || 25,
     };
 
-    /* Заглушка для тестов */
-    if (req.query[config.testModeQuery]) {
-        res.json(mocks.builds);
-        return;
-    }
-
     api.getBuildList(params)
-        .then((data) => res.json(data))
-        .catch((error) => res.status(400).end(error));
+        .then((data) => {
+            signale.success('GET BuildList succesfully!');
+            res.json(data);
+        })
+        .catch((err) => {
+            signale.error('GET BuildList error!');
+            signale.log(err);
+            res.status(400).end();
+        });
 };
 
 export const getBuildDetails = (req: Request, res: Response) => {
-    console.log('GET BuildDetails');
+    signale.await('GET BuildDetails');
 
     /* Заглушка для тестов */
     if (req.query[config.testModeQuery]) {
+        signale.warn('GET BuildDetails return stub because of test mode!');
         res.json(mocks.buildById(req.params.buildId));
         return;
     }
 
     api.getBuildDetails(req.params as api.BuildDetailsParams)
-        .then((data) => res.json(data))
-        .catch((error) => res.status(400).end(error));
+        .then((data) => {
+            signale.success('GET BuildDetails succesfully!');
+            res.json(data);
+        })
+        .catch((err) => {
+            signale.error('GET BuildDetails error!');
+            signale.log(err);
+            res.status(400).end();
+        });
 };
 
 export const getBuildLogs = (req: Request, res: Response) => {
-    console.log('GET BuildLog');
+    signale.await('GET BuildLogs');
 
     /* Заглушка для тестов */
     if (req.query[config.testModeQuery]) {
-        res.json(mocks.log);
+        signale.warn('GET BuildLogs return stub because of test mode!');
+        res.end(mocks.log);
         return;
     }
 
     // TODO Запрос логов долгий. Продумать кэш
 
     api.getBuildLog(req.params as api.BuildLogParams)
-        .then((data) => res.end(data))
-        .catch((error) => res.status(400).end(error));
+        .then((data) => {
+            signale.success('GET BuildLogs succesfully!');
+            res.end(data);
+        })
+        .catch((err) => {
+            signale.error('GET BuildLogs error!');
+            signale.log(err);
+            res.status(400).end();
+        });
 };
 
 export const requestBuild = (req: Request, res: Response) => {
-    console.log('POST requestBuild');
+    signale.await('POST requestBuild');
 
     /* Заглушка для тестов */
     if (req.query[config.testModeQuery]) {
+        signale.warn(
+            'POST requestBuild will not request build and return stub because of test mode!',
+        );
         res.json(mocks.newBuild);
         return;
     }
@@ -69,67 +97,131 @@ export const requestBuild = (req: Request, res: Response) => {
     const repoPath = path.resolve(config.repoFolderName);
 
     // TODO Клонировать репозиторий каждый раз плохо. Перейти на GitHub API
+    // Если репозиторий не клонировать заново, то информация о новых коммитах
+    // в той или иной ветке может быть недоступна
 
     git.clone(repoPath, config.repoName)
-        .then(() =>
-            Promise.all([
+        .then(() => {
+            signale.complete(
+                `Repository ${config.repoName} cloned successfully`,
+            );
+            return Promise.all([
                 git.commitMessageByHash(repoPath, commitHash),
                 git.commitAuthorByHash(repoPath, commitHash),
                 git.commitBranchByHash(repoPath, commitHash),
-            ]),
-        )
-        .then(([commitMessage, authorName, branchName]) =>
-            api.requestBuild({
+            ]);
+        })
+        .then(([commitMessage, authorName, branchName]) => {
+            signale.complete(`Commit details are received`);
+            return api.requestBuild({
                 commitHash,
                 commitMessage,
                 authorName,
                 branchName,
-            }),
-        )
-        .then((data) => res.json(data))
-        .catch((error) => res.status(400).end(error));
+            });
+        })
+        .then((data) => {
+            signale.success('POST requestBuild succesfully!');
+            res.json(data);
+        })
+        .catch((err) => {
+            signale.error('POST requestBuild error!');
+            signale.log(err);
+            res.status(400).end();
+        });
 };
 
 export const getSettings = (req: Request, res: Response) => {
-    console.log('GET getSettings');
+    signale.await('GET getSettings');
 
     /* Заглушка для тестов */
     if (req.query[config.testModeQuery]) {
+        signale.warn('GET getSettings return stub because of test mode!');
         res.json(mocks.settings);
         return;
     }
 
     api.getConfiguration()
-        .then((data) => res.json(data))
-        .catch((error) => res.status(400).end(error));
+        .then((data) => {
+            signale.success('GET getSettings succesfully!');
+            res.json(data);
+        })
+        .catch((err) => {
+            signale.error('GET getSettings error!');
+            signale.log(err);
+            res.status(400).end();
+        });
 };
 
 export const postSettings = async (req: Request, res: Response) => {
-    console.log('POST postSettings');
+    signale.await('POST postSettings');
 
     /* Заглушка для тестов */
     if (req.query[config.testModeQuery]) {
+        signale.warn(
+            'POST postSettings will not save settings because of test mode!',
+        );
         res.status(200).end();
         return;
     }
 
     const { repoName } = req.body;
-
-    try {
-        if (repoName !== config.repoName) {
-            config.repoName = repoName;
-            await api.deleteConfiguration();
-        }
-    } catch (e) {
-        console.error('ERROR! Can not delete Settings.');
-    }
-
     const repoFolder = path.resolve(config.repoFolderName);
 
-    git.clone(repoFolder, repoName)
-        .then(() =>
-            api.postConfiguration(req.body as api.ConfigurationPostData),
-        )
-        .then(() => res.status(400).end())
-        .catch((error) => res.status(400).end(error));
+    if (repoName !== config.repoName) {
+        signale.note('Repository is changed, current settings will be deleted');
+        git.clone(repoFolder, repoName)
+            .then(
+                () => {
+                    signale.complete(
+                        `Repository ${repoName} cloned successfully`,
+                    );
+                    return api.deleteConfiguration();
+                },
+                (err) => {
+                    signale.error(`Can not clone ${repoName}!`);
+                    signale.log(err);
+                    res.status(400).end('Repository not found!');
+                    return Promise.reject();
+                },
+            )
+            .then(
+                () => {
+                    signale.complete('Current settings deleted successfully');
+                    config.repoName = repoName;
+                    return git.clone(repoFolder, repoName);
+                },
+                (err) => {
+                    signale.error(`Can not delete current settings!`);
+                    signale.log(err);
+                    res.status(400).end();
+                    return api.postConfiguration(
+                        req.body as api.ConfigurationPostData,
+                    );
+                },
+            )
+            .then(() => {
+                signale.success('POST postSettings succesfully!');
+                res.status(200).end();
+            })
+            .catch((err) => {
+                signale.error('POST postSettings error!');
+                signale.log(err);
+                res.status(400).end();
+            });
+
+        api.deleteConfiguration();
+    } else {
+        signale.note('Repository name is not changed');
+        api.postConfiguration(req.body as api.ConfigurationPostData)
+            .then(() => {
+                signale.success('POST postSettings succesfully!');
+                res.status(200).end();
+            })
+            .catch((err) => {
+                signale.error('POST postSettings error!');
+                signale.log(err);
+                res.status(400).end();
+            });
+    }
 };
