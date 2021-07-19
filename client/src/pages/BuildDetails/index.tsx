@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { classnames } from '@bem-react/classnames';
+import toast, { Toaster } from 'react-hot-toast';
 
 import { cn } from '../../common/';
 
@@ -41,17 +42,28 @@ export const BuildDetails = memo<IBuildDetailsProps>((props) => {
 
     const history = useHistory();
 
-    const { rebuildError, isRebuilded } = useSelector(getRebuilStatus());
+    const { rebuildError, isRebuilded, isRebuilding } = useSelector(
+        getRebuilStatus(),
+    );
     const rebuildData = useSelector(getRebuildData());
 
     useEffect(() => {
+        if (isRebuilding) {
+            const loadingTostId = toast.loading('Waiting...');
+            return () => {
+                toast.dismiss(loadingTostId);
+            };
+        }
+    }, [isRebuilding, toast]);
+
+    useEffect(() => {
         if (rebuildError) {
-            alert(`Ошибка!\n\n${rebuildError}`);
+            toast.error(rebuildError);
             return () => {
                 dispatch(nullRebuildError());
             };
         }
-    }, [rebuildError, dispatch, nullRebuildError]);
+    }, [rebuildError, dispatch, nullRebuildError, toast]);
 
     useEffect(() => {
         if (isRebuilded && rebuildData) {
@@ -123,6 +135,7 @@ export const BuildDetails = memo<IBuildDetailsProps>((props) => {
             >
                 {buildMemo}
             </div>
+            <Toaster />
         </>
     );
 });

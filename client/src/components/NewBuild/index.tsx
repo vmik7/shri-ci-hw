@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { classnames } from '@bem-react/classnames';
+import toast, { Toaster } from 'react-hot-toast';
 
 import { cn } from '../../common/';
 
@@ -41,13 +42,22 @@ export const NewBuild = memo<INewBuildProps>((props) => {
     let history = useHistory();
 
     useEffect(() => {
+        if (isSubmitting) {
+            const loadingTostId = toast.loading('Waiting...');
+            return () => {
+                toast.dismiss(loadingTostId);
+            };
+        }
+    }, [isSubmitting, toast]);
+
+    useEffect(() => {
         if (submitError) {
-            alert(`Ошибка!\n\n${submitError}`);
+            toast.error(submitError);
             return () => {
                 dispatch(nullSubmitError());
             };
         }
-    }, [submitError, dispatch, nullSubmitError]);
+    }, [submitError, dispatch, nullSubmitError, toast]);
 
     useEffect(() => {
         if (newBuildData && isSubmitted) {
@@ -78,12 +88,12 @@ export const NewBuild = memo<INewBuildProps>((props) => {
             e.preventDefault();
             const errorMessage = validate();
             if (errorMessage) {
-                alert(errorMessage);
+                toast.error(errorMessage);
             } else {
                 dispatch(postBuild());
             }
         },
-        [validate, dispatch],
+        [validate, dispatch, toast],
     );
 
     const onChangeHandler = useCallback(
@@ -92,36 +102,39 @@ export const NewBuild = memo<INewBuildProps>((props) => {
     );
 
     return (
-        <Modal
-            extraClasses={classnames(cnNewBuild(), extraClasses)}
-            title="New build"
-            subtitle="Enter the commit hash which you want to build."
-            onWrapperClick={onCancelHandler}
-            content={
-                <form onSubmit={onSubmitHandler}>
-                    <TextField
-                        placeholder="Commit hash"
-                        required
-                        extraClasses={cnNewBuild('input')}
-                        name="hash"
-                        onChangeHandler={onChangeHandler}
-                        value={hash}
-                    />
-                    <div className={cnNewBuild('controls')}>
-                        <Button
-                            isPrimary={true}
-                            text="Run build"
-                            type="submit"
-                            disabled={isSubmitting}
+        <>
+            <Modal
+                extraClasses={classnames(cnNewBuild(), extraClasses)}
+                title="New build"
+                subtitle="Enter the commit hash which you want to build."
+                onWrapperClick={onCancelHandler}
+                content={
+                    <form onSubmit={onSubmitHandler}>
+                        <TextField
+                            placeholder="Commit hash"
+                            required
+                            extraClasses={cnNewBuild('input')}
+                            name="hash"
+                            onChangeHandler={onChangeHandler}
+                            value={hash}
                         />
-                        <Button
-                            text="Cancel"
-                            onClick={onCancelHandler}
-                            disabled={isSubmitting}
-                        />
-                    </div>
-                </form>
-            }
-        />
+                        <div className={cnNewBuild('controls')}>
+                            <Button
+                                isPrimary={true}
+                                text="Run build"
+                                type="submit"
+                                disabled={isSubmitting}
+                            />
+                            <Button
+                                text="Cancel"
+                                onClick={onCancelHandler}
+                                disabled={isSubmitting}
+                            />
+                        </div>
+                    </form>
+                }
+            />
+            <Toaster />
+        </>
     );
 });
