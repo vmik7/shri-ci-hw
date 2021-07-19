@@ -8,7 +8,14 @@ import {
     useAppSelector as useSelector,
     useAppDispatch as useDispatch,
 } from '../../store/hooks';
-import { getBuildById, fetchRebuild } from '../../store/buildDetailsSlice';
+import {
+    getBuildById,
+    getRebuildData,
+    getRebuilStatus,
+    fetchRebuild,
+    nullRebuildError,
+    nullRebuildData,
+} from '../../store/buildDetailsSlice';
 import { getRepoName } from '../../store/settingsSlice';
 
 import { Header } from '../../components/Header';
@@ -34,16 +41,32 @@ export const BuildDetails = memo<IBuildDetailsProps>((props) => {
 
     const history = useHistory();
 
+    const { rebuildError, isRebuilded } = useSelector(getRebuilStatus());
+    const rebuildData = useSelector(getRebuildData());
+
+    useEffect(() => {
+        if (rebuildError) {
+            alert(`Ошибка!\n\n${rebuildError}`);
+            return () => {
+                dispatch(nullRebuildError());
+            };
+        }
+    }, [rebuildError, dispatch, nullRebuildError]);
+
+    useEffect(() => {
+        if (isRebuilded && rebuildData) {
+            history.push(`/build/${rebuildData.id}`);
+            return () => {
+                dispatch(nullRebuildData());
+            };
+        }
+    }, [isRebuilded, rebuildData, dispatch, nullRebuildData]);
+
     const cnBuildDetails = cn('build-details');
 
     const onRebuildHandler = useCallback(() => {
-        dispatch(
-            fetchRebuild({
-                hash: data.commitHash,
-                history,
-            }),
-        );
-    }, [dispatch, data, history]);
+        dispatch(fetchRebuild(data.commitHash));
+    }, [dispatch, data]);
 
     const onSettingsHandler = useCallback(() => {
         history.push('/settings');

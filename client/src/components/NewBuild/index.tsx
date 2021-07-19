@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { classnames } from '@bem-react/classnames';
 
@@ -15,6 +15,7 @@ import {
     postBuild,
     getNewBuildData,
     nullSubmitError,
+    nullNewBuildData,
 } from '../../store/newBuildSlice';
 import { closeModal } from '../../store/buildsSlice';
 
@@ -32,10 +33,31 @@ export const NewBuild = memo<INewBuildProps>((props) => {
     const dispatch = useDispatch();
 
     const hash = useSelector(getHash());
-    const { isSubmitting, submitError } = useSelector(getSubmittingStatus());
+    const { isSubmitting, submitError, isSubmitted } = useSelector(
+        getSubmittingStatus(),
+    );
     const newBuildData = useSelector(getNewBuildData());
 
     let history = useHistory();
+
+    useEffect(() => {
+        if (submitError) {
+            alert(`Ошибка!\n\n${submitError}`);
+            return () => {
+                dispatch(nullSubmitError());
+            };
+        }
+    }, [submitError, dispatch, nullSubmitError]);
+
+    useEffect(() => {
+        if (newBuildData && isSubmitted) {
+            history.push(`/build/${newBuildData.id}`);
+            return () => {
+                dispatch(closeModal());
+                dispatch(nullNewBuildData());
+            };
+        }
+    }, [history, newBuildData, dispatch, nullNewBuildData]);
 
     const cnNewBuild = cn('new-build');
 
@@ -46,18 +68,9 @@ export const NewBuild = memo<INewBuildProps>((props) => {
         return '';
     }
 
-    if (submitError) {
-        alert(`Ошибка!\n\n${submitError}`);
-        dispatch(nullSubmitError());
-    }
-
-    if (newBuildData) {
-        history.push(`/build/${newBuildData.id}`);
-    }
-
     const onCancelHandler = useCallback(() => {
         dispatch(closeModal());
-        dispatch(setHash(''));
+        dispatch(nullNewBuildData());
     }, [dispatch]);
 
     const onSubmitHandler = useCallback(

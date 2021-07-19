@@ -42,22 +42,25 @@ export const fetchLogById = createAsyncThunk<
 });
 
 export const fetchRebuild = createAsyncThunk<
-    { response: BuildRequestResult; history: History },
-    { hash: string; history: History },
+    BuildRequestResult,
+    string,
     AsyncThunkConfig
->(
-    `${buildDetailsSliceName}/rebuild`,
-    async ({ hash, history }, { extra: { api } }) => {
-        const response = await api.newBuild({ commitHash: hash });
-        return { response, history };
-    },
-);
+>(`${buildDetailsSliceName}/rebuild`, (hash, { extra: { api } }) => {
+    return api.newBuild({ commitHash: hash });
+});
 
 export const buildSlice = createSlice({
     name: buildDetailsSliceName,
     initialState,
 
-    reducers: {},
+    reducers: {
+        nullRebuildError(store) {
+            store.rebuildError = null;
+        },
+        nullRebuildData(store) {
+            store.rebuild = null;
+        },
+    },
 
     extraReducers: (builder) => {
         builder
@@ -115,19 +118,12 @@ export const buildSlice = createSlice({
                 fetchRebuild.fulfilled,
                 (
                     state: IBuildDetailsState,
-                    action: PayloadAction<{
-                        response: BuildRequestResult;
-                        history: History;
-                    }>,
+                    action: PayloadAction<BuildRequestResult>,
                 ) => {
                     state.isRebuilding = false;
 
-                    const { response, history } = action.payload;
-
-                    state.rebuild = response;
+                    state.rebuild = action.payload;
                     state.isRebuilded = true;
-
-                    history.push(`/build/${state.rebuild.id}`);
                 },
             )
             .addCase(fetchRebuild.rejected, (state: IBuildDetailsState) => {
@@ -168,3 +164,7 @@ export const getRebuilStatus = () => (state: RootState) => {
         rebuildError: state[buildDetailsSliceName].rebuildError,
     };
 };
+
+/** Actions */
+
+export const { nullRebuildError, nullRebuildData } = buildSlice.actions;
