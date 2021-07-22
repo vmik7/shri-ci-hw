@@ -3,10 +3,7 @@ import { IComponentProps } from '../../common/types';
 
 export interface ITextFieldProps
     extends IComponentProps,
-        React.DetailedHTMLProps<
-            React.InputHTMLAttributes<HTMLInputElement>,
-            HTMLInputElement
-        > {
+        React.InputHTMLAttributes<HTMLInputElement> {
     isLabeled?: boolean;
     labelText?: string;
     isInline?: boolean;
