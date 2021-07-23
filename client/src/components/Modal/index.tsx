@@ -1,5 +1,4 @@
 import { memo, useCallback, useMemo, useRef } from 'react';
-import { classnames } from '@bem-react/classnames';
 
 import { cn } from '../../common/';
 const cnModal = cn('modal');
@@ -35,7 +34,7 @@ export const Modal = memo<IModalProps>((props) => {
     );
 
     return (
-        <div className={classnames(cnModal(), extraClasses)}>
+        <div className={cnModal(null, [extraClasses])}>
             <div
                 ref={wrapperEl}
                 className={cnModal('wrapper')}

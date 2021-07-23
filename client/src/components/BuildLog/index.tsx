@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { classnames } from '@bem-react/classnames';
 import Ansi from 'ansi-to-react';
 
 import { cn } from '../../common/';
@@ -14,7 +13,7 @@ export const BuildLog = memo<IBuildLogProps>((props) => {
     const { logs, extraClasses } = props;
 
     return (
-        <pre className={classnames(cnBuildLog(), extraClasses)}>
+        <pre className={cnBuildLog(null, [extraClasses])}>
             <Ansi useClasses>{logs}</Ansi>
         </pre>
     );

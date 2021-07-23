@@ -1,5 +1,4 @@
 import { useMemo, memo } from 'react';
-import { classnames } from '@bem-react/classnames';
 import { format, intervalToDuration, formatDuration } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
@@ -87,13 +86,13 @@ export const BuildItem = memo<IBuildItemProps>((props) => {
 
     return (
         <article
-            className={classnames(
-                cnBuildItem({
+            className={cnBuildItem(
+                {
                     status: statusMod,
                     deatiled: isDetailed,
                     clickable: Boolean(onClick),
-                }),
-                extraClasses,
+                },
+                [extraClasses],
             )}
             onClick={onClick}
         >

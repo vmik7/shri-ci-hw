@@ -1,6 +1,5 @@
 import { memo, useCallback } from 'react';
 import { useHistory } from 'react-router';
-import { classnames } from '@bem-react/classnames';
 
 import { cn } from '../../common/';
 const cnStart = cn('start');
@@ -38,11 +37,8 @@ export const Start = memo<IStartProps>((props) => {
                     },
                 ]}
             />
-            <div
-                className={classnames(cnStart(), contentClass)}
-                data-testid="start"
-            >
-                <div className={classnames(cnStart('container'), 'container')}>
+            <div className={cnStart(null, [contentClass])} data-testid="start">
+                <div className={cnStart('container', ['container'])}>
                     <img
                         className={cnStart('image')}
                         src={iconSettings}

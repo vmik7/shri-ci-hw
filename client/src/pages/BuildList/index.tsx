@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
-import { classnames } from '@bem-react/classnames';
 
 import { cn } from '../../common/';
 const cnBuildList = cn('build-list');
@@ -108,15 +107,10 @@ export const BuildList = memo<IBuildListProps>((props) => {
                 ]}
             />
             <div
-                className={classnames(cnBuildList(), contentClass)}
+                className={cnBuildList(null, [contentClass])}
                 data-testid="build-list"
             >
-                <div
-                    className={classnames(
-                        cnBuildList('container'),
-                        'container',
-                    )}
-                >
+                <div className={cnBuildList('container', ['container'])}>
                     {buildsMemo}
                     {showMoreMemo}
                 </div>

@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router';
-import { classnames } from '@bem-react/classnames';
 import toast, { Toaster } from 'react-hot-toast';
 
 import { cn } from '../../common/';
@@ -103,7 +102,7 @@ export const NewBuild = memo<INewBuildProps>((props) => {
     return (
         <>
             <Modal
-                extraClasses={classnames(cnNewBuild(), extraClasses)}
+                extraClasses={cnNewBuild(null, [extraClasses])}
                 title="New build"
                 subtitle="Enter the commit hash which you want to build."
                 onWrapperClick={onCancelHandler}

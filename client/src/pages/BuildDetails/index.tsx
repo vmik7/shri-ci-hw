@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { classnames } from '@bem-react/classnames';
 import toast, { Toaster } from 'react-hot-toast';
 
 import { cn } from '../../common/';
@@ -98,17 +97,12 @@ export const BuildDetails = memo<IBuildDetailsProps>((props) => {
     const buildMemo = useMemo(
         () =>
             data ? (
-                <div
-                    className={classnames(
-                        cnBuildDetails('container'),
-                        'container',
-                    )}
-                >
+                <div className={cnBuildDetails('container', ['container'])}>
                     <BuildItem data={data} isDetailed={true} />
                     {buildLogMemo}
                 </div>
             ) : null,
-        [data, logs, cnBuildDetails, classnames],
+        [data, logs, cnBuildDetails],
     );
 
     return (
@@ -136,7 +130,7 @@ export const BuildDetails = memo<IBuildDetailsProps>((props) => {
                 ]}
             />
             <div
-                className={classnames(cnBuildDetails(), contentClass)}
+                className={cnBuildDetails(null, [contentClass])}
                 data-testid="build-details"
             >
                 {buildMemo}

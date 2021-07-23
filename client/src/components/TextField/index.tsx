@@ -1,5 +1,4 @@
 import { memo, useCallback, useMemo } from 'react';
-import { classnames } from '@bem-react/classnames';
 
 import { cn } from '../../common/';
 const cnTextField = cn('text-field');
@@ -68,12 +67,12 @@ export const TextField = memo<ITextFieldProps>((props) => {
 
     return (
         <WrapperTag
-            className={classnames(
-                cnTextField({
+            className={cnTextField(
+                {
                     inline: isInline,
                     required: inputAttributes.required,
-                }),
-                extraClasses,
+                },
+                [extraClasses],
             )}
         >
             {inputMemo}

@@ -1,5 +1,4 @@
 import { memo, useMemo } from 'react';
-import { classnames } from '@bem-react/classnames';
 
 import { cn } from '../../common/';
 const cnButton = cn('button');
@@ -34,14 +33,14 @@ export const Button = memo<IButtonProps>((props) => {
 
     return (
         <button
-            className={classnames(
-                cnButton({
+            className={cnButton(
+                {
                     primary: isPrimary,
                     small: isSmall,
                     'has-icon': hasIcon,
                     'icon-only': iconOnly,
-                }),
-                extraClasses,
+                },
+                [extraClasses],
             )}
             onClick={onClick}
             {...buttonProps}

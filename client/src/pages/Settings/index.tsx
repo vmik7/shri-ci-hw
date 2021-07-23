@@ -1,6 +1,5 @@
 import { memo, useEffect, useCallback, useState } from 'react';
 import { useHistory } from 'react-router';
-import { classnames } from '@bem-react/classnames';
 import toast, { Toaster } from 'react-hot-toast';
 
 import { cn } from '../../common/';
@@ -140,12 +139,10 @@ export const Settings = memo<ISettingsProps>((props) => {
         <>
             <Header title="School CI server" isFaded={true} />
             <div
-                className={classnames(cnSettings(), contentClass)}
+                className={cnSettings(null, [contentClass])}
                 data-testid="settings"
             >
-                <div
-                    className={classnames(cnSettings('container'), 'container')}
-                >
+                <div className={cnSettings('container', ['container'])}>
                     <div className={cnSettings('header')}>
                         <h2 className={cnSettings('title')}>Settings</h2>
                         <p className={cnSettings('sub-title')}>
