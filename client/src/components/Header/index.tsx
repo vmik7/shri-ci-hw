@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { classnames } from '@bem-react/classnames';
 
 import { cn } from '../../common/';
+const cnHeader = cn('header');
 
 import { Button } from '../Button';
 
@@ -12,8 +13,6 @@ import './style.scss';
 
 export const Header = memo<IHeaderProps>((props) => {
     const { title, isFaded, buttons = [], extraClasses } = props;
-
-    const cnHeader = cn('header');
 
     const buttonsMemo = useMemo(
         () =>

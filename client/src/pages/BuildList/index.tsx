@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { classnames } from '@bem-react/classnames';
 
 import { cn } from '../../common/';
+const cnBuildList = cn('build-list');
 
 import {
     useAppSelector as useSelector,
@@ -33,8 +34,6 @@ export const BuildList = memo<IBuildListProps>((props) => {
     const repoName = useSelector(getRepoName());
 
     const history = useHistory();
-
-    const cnBuildList = cn('build-list');
 
     const onRunBuildHandler = useCallback(() => {
         dispatch(openModal());

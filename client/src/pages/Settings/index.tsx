@@ -4,6 +4,7 @@ import { classnames } from '@bem-react/classnames';
 import toast, { Toaster } from 'react-hot-toast';
 
 import { cn } from '../../common/';
+const cnSettings = cn('settings');
 
 import {
     useAppSelector as useSelector,
@@ -47,8 +48,6 @@ export const Settings = memo<ISettingsProps>((props) => {
     );
 
     const history = useHistory();
-
-    const cnSettings = cn('settings');
 
     function validate() {
         if (!repoName) {

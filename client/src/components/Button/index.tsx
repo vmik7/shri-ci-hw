@@ -2,6 +2,8 @@ import { memo, useMemo } from 'react';
 import { classnames } from '@bem-react/classnames';
 
 import { cn } from '../../common/';
+const cnButton = cn('button');
+
 import { IButtonProps } from './types';
 
 import './style.scss';
@@ -18,8 +20,6 @@ export const Button = memo<IButtonProps>((props) => {
         onClick,
         ...buttonProps
     } = props;
-
-    const cnButton = cn('button');
 
     const iconMemo = useMemo(
         () =>

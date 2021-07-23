@@ -1,6 +1,8 @@
 import { memo, useCallback, useMemo } from 'react';
-import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
+
+import { cn } from '../../common/';
+const cnTextField = cn('text-field');
 
 import { ITextFieldProps } from './types';
 
@@ -16,7 +18,6 @@ export const TextField = memo<ITextFieldProps>((props) => {
         ...inputAttributes
     } = props;
 
-    const cnTextField = cn('text-field');
     const WrapperTag = isInline ? 'span' : 'div';
 
     const onChangeCallback = useCallback(

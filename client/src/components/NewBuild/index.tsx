@@ -4,6 +4,7 @@ import { classnames } from '@bem-react/classnames';
 import toast, { Toaster } from 'react-hot-toast';
 
 import { cn } from '../../common/';
+const cnNewBuild = cn('new-build');
 
 import {
     useAppSelector as useSelector,
@@ -68,8 +69,6 @@ export const NewBuild = memo<INewBuildProps>((props) => {
             };
         }
     }, [history, newBuildData, dispatch, nullNewBuildData]);
-
-    const cnNewBuild = cn('new-build');
 
     function validate() {
         if (!/^[a-z0-9]+$/.test(hash)) {

@@ -4,6 +4,8 @@ import { format, intervalToDuration, formatDuration } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 import { cn } from '../../common/';
+const cnBuildItem = cn('build-item');
+
 import { IBuildItemProps } from './types';
 
 import './style.scss';
@@ -42,8 +44,6 @@ export const BuildItem = memo<IBuildItemProps>((props) => {
         start,
         duration,
     } = data;
-
-    const cnBuildItem = cn('build-item');
 
     const startMemo = useMemo(
         () =>

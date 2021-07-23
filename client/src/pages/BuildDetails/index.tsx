@@ -4,6 +4,7 @@ import { classnames } from '@bem-react/classnames';
 import toast, { Toaster } from 'react-hot-toast';
 
 import { cn } from '../../common/';
+const cnBuildDetails = cn('build-details');
 
 import {
     useAppSelector as useSelector,
@@ -73,8 +74,6 @@ export const BuildDetails = memo<IBuildDetailsProps>((props) => {
             };
         }
     }, [isRebuilded, rebuildData, dispatch, nullRebuildData]);
-
-    const cnBuildDetails = cn('build-details');
 
     const onRebuildHandler = useCallback(() => {
         dispatch(fetchRebuild(data.commitHash));

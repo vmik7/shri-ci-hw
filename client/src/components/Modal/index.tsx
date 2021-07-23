@@ -1,6 +1,8 @@
 import { memo, useCallback, useMemo, useRef } from 'react';
-import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
+
+import { cn } from '../../common/';
+const cnModal = cn('modal');
 
 import { IModalProps } from './types';
 
@@ -9,7 +11,6 @@ import './style.scss';
 export const Modal = memo<IModalProps>((props) => {
     const { title, subtitle, content, extraClasses, onWrapperClick } = props;
 
-    const cnModal = cn('modal');
     const wrapperEl = useRef(null);
 
     const wrapperClicHandler = useCallback(

@@ -1,6 +1,8 @@
 import { memo } from 'react';
-import { cn } from '../../common/';
 import { classnames } from '@bem-react/classnames';
+
+import { cn } from '../../common/';
+const cnFooter = cn('footer');
 
 import { IFooterProps } from './types';
 
@@ -8,8 +10,6 @@ import './style.scss';
 
 export const Footer = memo<IFooterProps>((props) => {
     const { extraClasses } = props;
-
-    const cnFooter = cn('footer');
 
     return (
         <footer className={classnames(cnFooter(), extraClasses)}>
